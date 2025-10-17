@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
-      ddl-auto: none   # Gi? nguyên DB, không t?o/s?a b?ng
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
