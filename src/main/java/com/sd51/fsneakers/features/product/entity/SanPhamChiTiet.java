@@ -79,6 +79,6 @@ public class SanPhamChiTiet extends BaseEntity {
     @JoinColumn(name = "san_pham_id", nullable = false)
     private SanPham sanPham;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chiTietSanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HinhAnhSanPham> hinhAnhSanPhams;
 }

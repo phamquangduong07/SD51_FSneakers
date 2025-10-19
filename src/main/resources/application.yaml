@@ -5,8 +5,11 @@ spring:
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=FSneakers;encrypt=true;trustServerCertificate=true
     username: sa
-    password: 28102003
+    password: 123
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  output:
+    ansi:
+      enabled: ALWAYS
   jpa:
     hibernate:
       ddl-auto: none
@@ -14,3 +17,5 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
+server:
+  port: 8081
