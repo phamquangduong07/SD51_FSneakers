@@ -30,38 +30,38 @@ public class DanhMucServiceImpl implements DanhMucService {
     }
 
     @Override
-    public DanhMuc updateDanhMucByMa(String ma, DanhMuc danhMucNew) {
+    public DanhMuc updateDanhMucByMa(String ma, DanhMuc danhMucUpdate) {
         DanhMuc existing = findByMa(ma);
-        if(existing== null){
+        if (existing == null) {
             throw new RuntimeException("Mã danh mục '" + ma + "' không tồn tại!");
         }
-        if(!danhMucNew.getMa().equals(ma)){
-            if(findByMa(danhMucNew.getMa())!=null){
-                throw new RuntimeException("Mã danh mục '" + danhMucNew.getMa() + "' đã tồn tại khác !");
-            }else {
+        if (!danhMucUpdate.getMa().equals(ma)) {
+            if (findByMa(danhMucUpdate.getMa()) != null) {
+                throw new RuntimeException("Mã danh mục '" + danhMucUpdate.getMa() + "' đã tồn tại!");
+            } else {
 
             }
         }
-        existing.setMa(danhMucNew.getMa());
-        existing.setTen(danhMucNew.getTen());
-        existing.setTrangThai(danhMucNew.getTrangThai());
+        // Cập nhật các thuộc tính của existing với giá trị từ danhMucUpdate
+        existing.setMa(danhMucUpdate.getMa());
+        existing.setTen(danhMucUpdate.getTen());
+        existing.setTrangThai(danhMucUpdate.getTrangThai());
         return danhMucRepository.save(existing);
     }
 
     @Override
-    public List<DanhMuc> fillAll() {
+    public List<DanhMuc> getAllDanhMuc() {
         return danhMucRepository.findAll();
     }
 
     @Override
     public DanhMuc deleteDanhMuc(String ma) {
         DanhMuc existing = findByMa(ma);
-        if(existing== null){
+        if (existing == null) {
             throw new RuntimeException("Mã danh mục '" + ma + "' không tồn tại!");
         }
         danhMucRepository.delete(existing);
         return existing;
     }
-
 
 }

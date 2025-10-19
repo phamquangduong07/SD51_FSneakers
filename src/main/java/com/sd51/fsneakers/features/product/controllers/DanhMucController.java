@@ -17,18 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
-@RequestMapping("/v1/api/danh-muc")
+@RequestMapping("v1/api/danh-muc")
 public class DanhMucController {
 
     @Autowired
     private DanhMucService danhMucService;
 
-    @GetMapping({"", "/"})
+    @GetMapping({ "", "/" })
     public List<DanhMuc> getAll() {
-        return danhMucService.fillAll();
+        return ResponseEntity.ok(danhMucService.getAllDanhMuc()).getBody();
     }
 
     @PostMapping("/add")
@@ -45,6 +43,5 @@ public class DanhMucController {
     public DanhMuc deleteDanhMuc(@PathVariable String ma) {
         return ResponseEntity.ok(danhMucService.deleteDanhMuc(ma)).getBody();
     }
-    
-    
+
 }

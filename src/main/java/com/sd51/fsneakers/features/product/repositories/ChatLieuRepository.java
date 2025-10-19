@@ -8,6 +8,4 @@ import java.util.UUID;
 
 public interface ChatLieuRepository extends JpaRepository<ChatLieu, UUID> {
     ChatLieu findByMa(String ma);
-
-    List<ChatLieu> ma(String ma);
 }
