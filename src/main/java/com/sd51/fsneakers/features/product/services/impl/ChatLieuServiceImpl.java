@@ -15,8 +15,35 @@ public class ChatLieuServiceImpl implements ChatLieuService {
 
     @Override
     public ChatLieu createChatLieu(ChatLieu chatLieu) {
+        if (findByMa(chatLieu.getMa()) != null) {
+            throw new RuntimeException("Mã chất liệu '" + chatLieu.getMa() + "' đã tồn tại!");
+        }
 
         return chatLieuRepository.save(chatLieu);
+    }
+
+    @Override
+    public ChatLieu findByMa(String ma) {
+        return chatLieuRepository.findByMa(ma);
+    }
+
+    @Override
+    public ChatLieu updateChatLieuByMa(String ma, ChatLieu chatLieuNew) {
+        ChatLieu existing = findByMa(ma);
+        if(existing== null){
+            throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
+        }
+        if(!chatLieuNew.getMa().equals(ma)){
+            if(findByMa(chatLieuNew.getMa())!=null){
+                throw new RuntimeException("Mã chất liệu '" + chatLieuNew.getMa() + "' đã tồn tại khác !");
+            }else {
+
+            }
+        }
+        existing.setMa(chatLieuNew.getMa());
+        existing.setTen(chatLieuNew.getTen());
+        existing.setTrangThai(chatLieuNew.getTrangThai());
+        return chatLieuRepository.save(existing);
     }
 
 

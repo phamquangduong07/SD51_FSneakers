@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "san_pham_chi_tiet")
+@Table(name = "chi_tiet_san_pham")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -76,4 +77,7 @@ public class SanPhamChiTiet extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "san_pham_id", nullable = false)
     private SanPham sanPham;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HinhAnhSanPham> hinhAnhSanPhams;
 }
