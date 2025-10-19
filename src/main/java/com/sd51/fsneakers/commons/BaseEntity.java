@@ -1,4 +1,4 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.commons;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

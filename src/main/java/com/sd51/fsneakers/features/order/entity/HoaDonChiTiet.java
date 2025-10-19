@@ -1,5 +1,6 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.order.entity;
 
+import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import jakarta.persistence.*;
 import lombok.*;
 

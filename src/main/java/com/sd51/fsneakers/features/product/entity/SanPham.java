@@ -1,18 +1,19 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.product.entity;
 
+import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "mau_sac")
+@Table(name = "san_pham")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MauSac extends BaseEntity{
+public class SanPham extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", columnDefinition = "uniqueidentifier")
@@ -23,6 +24,9 @@ public class MauSac extends BaseEntity{
 
     @Column(name = "ten", length = 255)
     private String ten;
+
+    @Column(name = "mo_ta", length = 255)
+    private String moTa;
 
     @Column(name = "trang_thai", nullable = false)
     private Integer trangThai;

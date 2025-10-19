@@ -1,5 +1,8 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.cart.entity;
 
+import com.sd51.fsneakers.commons.BaseEntity;
+import com.sd51.fsneakers.features.user.entity.KhachHang;
+import com.sd51.fsneakers.features.user.entity.NhanVien;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;

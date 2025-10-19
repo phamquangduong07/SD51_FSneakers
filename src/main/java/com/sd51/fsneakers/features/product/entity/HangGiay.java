@@ -1,5 +1,6 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.product.entity;
 
+import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HangGiay extends BaseEntity{
+public class HangGiay extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", columnDefinition = "uniqueidentifier")

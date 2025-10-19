@@ -1,12 +1,10 @@
 package com.sd51.fsneakers.features.product.controllers;
 
-import com.sd51.fsneakers.entity.ChatLieu;
+import com.sd51.fsneakers.features.product.entity.ChatLieu;
 import com.sd51.fsneakers.features.product.services.ChatLieuService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/chat-lieu")

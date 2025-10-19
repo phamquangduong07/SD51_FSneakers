@@ -1,9 +1,9 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.order.entity;
 
+import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity

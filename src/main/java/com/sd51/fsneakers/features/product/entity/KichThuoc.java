@@ -1,20 +1,19 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.product.entity;
 
+import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "chat_lieu")
+@Table(name = "kich_thuoc")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChatLieu extends BaseEntity{
+public class KichThuoc extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", columnDefinition = "uniqueidentifier")
@@ -29,10 +28,5 @@ public class ChatLieu extends BaseEntity{
     @Column(name = "trang_thai", nullable = false)
     private Integer trangThai;
 
-    public ChatLieu( String ma, String ten, Integer trangThai) {
 
-        this.ma = ma;
-        this.ten = ten;
-        this.trangThai = trangThai;
-    }
 }

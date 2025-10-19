@@ -1,4 +1,6 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.voucher;
+import com.sd51.fsneakers.commons.BaseEntity;
+import com.sd51.fsneakers.features.user.entity.KhachHang;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NguoiDungVoucher extends BaseEntity{
+public class NguoiDungVoucher extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", columnDefinition = "uniqueidentifier")

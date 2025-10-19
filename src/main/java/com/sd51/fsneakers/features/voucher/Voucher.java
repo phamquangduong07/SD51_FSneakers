@@ -1,5 +1,6 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.voucher;
 
+import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

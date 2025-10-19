@@ -1,7 +1,8 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.product.entity;
+import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+
 import java.util.UUID;
 @Entity
 @Table(name = "hinh_anh")
@@ -10,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HinhAnhSanPham extends BaseEntity{
+public class HinhAnhSanPham extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uniqueidentifier")

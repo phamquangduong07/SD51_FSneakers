@@ -1,5 +1,8 @@
-package com.sd51.fsneakers.entity;
+package com.sd51.fsneakers.features.notification.entity;
 
+import com.sd51.fsneakers.commons.BaseEntity;
+import com.sd51.fsneakers.features.order.entity.HoaDon;
+import com.sd51.fsneakers.features.user.entity.KhachHang;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

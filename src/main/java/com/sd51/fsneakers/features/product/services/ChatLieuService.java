@@ -1,6 +1,6 @@
 package com.sd51.fsneakers.features.product.services;
 
-import com.sd51.fsneakers.entity.ChatLieu;
+import com.sd51.fsneakers.features.product.entity.ChatLieu;
 
 public interface ChatLieuService {
      ChatLieu createChatLieu(ChatLieu chatLieu);
