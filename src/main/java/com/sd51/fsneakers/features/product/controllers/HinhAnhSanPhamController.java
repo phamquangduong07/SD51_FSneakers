@@ -1,10 +1,12 @@
 package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import com.sd51.fsneakers.features.product.services.HinhAnhSanPhamService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/v1/hinh-anh-san-pham")
@@ -58,5 +61,27 @@ public class HinhAnhSanPhamController {
                                      @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return  hinhAnhSanPhamService.searchHinhAnhSanPham(keyword, trangThai, pageable);
+    }
+
+    @PostMapping(value = "/upload/{chiTietId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> upload(
+            @PathVariable UUID chiTietId,
+            @ModelAttribute("files") List<MultipartFile> files) {
+        try {
+            List<HinhAnhSanPham> result = hinhAnhSanPhamService.updloadImage(chiTietId, files);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{chiTietId}")
+    public ResponseEntity<?> getImages(@PathVariable UUID chiTietId) {
+        try {
+            List<HinhAnhSanPham> images = hinhAnhSanPhamService.getImagesByChiTietId(chiTietId);
+            return ResponseEntity.ok(images);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

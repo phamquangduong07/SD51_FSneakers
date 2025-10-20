@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.repositories;
 
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -31,4 +32,6 @@ public interface HinhAnhSanPhamRepository extends JpaRepository<HinhAnhSanPham, 
             @Param("keyword") String keyword,
             @Param("trangThai") Integer trangThai,
             Pageable pageable);
+
+    List<HinhAnhSanPham> findByChiTietSanPham_Id(UUID chiTietSanPhamId);
 }
