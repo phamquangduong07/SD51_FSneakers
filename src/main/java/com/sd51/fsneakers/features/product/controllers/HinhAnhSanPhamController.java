@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @RestController
-@RequestMapping("v1/api/hinh-anh-san-pham")
+@RequestMapping("api/v1/hinh-anh-san-pham")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HinhAnhSanPhamController {
 
     HinhAnhSanPhamService hinhAnhSanPhamService;
 
-    @GetMapping({"", "/"})
+    @GetMapping({ "", "/" })
     public List<HinhAnhSanPham> getAllHinhAnhBySanPham() {
         return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhBySanPham()).getBody();
     }
@@ -38,7 +38,8 @@ public class HinhAnhSanPhamController {
     }
 
     @PutMapping("/update/{ma}")
-    public HinhAnhSanPham updateHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPhamUpdate,@PathVariable String ma) {
+    public HinhAnhSanPham updateHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPhamUpdate,
+            @PathVariable String ma) {
         return ResponseEntity.ok(hinhAnhSanPhamService.updateHinhAnhSanPham(ma, hinhAnhSanPhamUpdate)).getBody();
     }
 

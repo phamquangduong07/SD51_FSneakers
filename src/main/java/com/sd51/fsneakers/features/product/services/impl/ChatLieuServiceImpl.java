@@ -10,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -66,6 +68,16 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     @Override
     public List<ChatLieu> getAllChatLieu() {
         return chatLieuRepository.findAll();
+    }
+
+    @Override
+    public Page<ChatLieu> getAllChatLieuPage(Pageable pageable) {
+       return chatLieuRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<ChatLieu> searchChatLieu(String keyword, Integer trangThai, Pageable pageable) {
+        return chatLieuRepository.searchChatLieu(keyword, trangThai, pageable);
     }
 
 }

@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @RestController
-@RequestMapping("v1/api/san-pham")
+@RequestMapping("api/v1/san-pham")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SanPhamController {
 
     SanPhamService sanPhamService;
 
-    @GetMapping({"", "/"})
+    @GetMapping({ "", "/" })
     public List<SanPham> getAllSanPham() {
         return ResponseEntity.ok(sanPhamService.getAllSanPham()).getBody();
     }

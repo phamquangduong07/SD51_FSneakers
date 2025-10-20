@@ -22,7 +22,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("v1/api/de-giay")
+@RequestMapping("api/v1/de-giay")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DeGiayController {

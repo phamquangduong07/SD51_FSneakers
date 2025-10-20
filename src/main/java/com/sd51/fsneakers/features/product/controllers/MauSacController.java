@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @RestController
-@RequestMapping("v1/api/mau-sac")
+@RequestMapping("api/v1/mau-sac")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MauSacController {
 
     MauSacService mauSacService;
 
-    @GetMapping({"", "/"})
+    @GetMapping({ "", "/" })
     public List<MauSac> getAllMauSac() {
         return ResponseEntity.ok(mauSacService.getAllMauSac()).getBody();
     }
@@ -47,5 +47,4 @@ public class MauSacController {
         return ResponseEntity.ok(mauSacService.deleteMauSac(ma)).getBody();
     }
 
-    
 }
