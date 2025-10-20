@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.MauSac;
@@ -61,9 +63,19 @@ public class MauSacServiceImpl implements MauSacService {
         if (existing == null) {
             throw new IllegalArgumentException("Mã màu sắc '" + maMauSac + "' không tồn tại.");
         }
-        
+
         mauSacRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<MauSac> getAllMauSacPage(Pageable pageable) {
+        return mauSacRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<MauSac> searchMauSac(String keyword, Integer trangThai, Pageable pageable) {
+        return mauSacRepository.searchMauSac(keyword, trangThai, pageable);
     }
 
 }

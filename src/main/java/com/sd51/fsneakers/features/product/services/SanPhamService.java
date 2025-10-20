@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.sd51.fsneakers.features.product.entity.SanPham;
 
 public interface SanPhamService {
@@ -15,5 +18,9 @@ public interface SanPhamService {
     SanPham updateSanPham(String ma, SanPham updateSanPham);
 
     SanPham deleteSanPham(String maSanPham);
-    
+
+    Page<SanPham> getAllSanPhamPage(Pageable pageable);
+
+    Page<SanPham> searchSanPham(String keyword, Integer trangThai, Pageable pageable);
+
 }

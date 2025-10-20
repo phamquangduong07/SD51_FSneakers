@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.DanhMuc;
@@ -66,6 +68,16 @@ public class DanhMucServiceImpl implements DanhMucService {
         }
         danhMucRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<DanhMuc> getAllDanhMucPage(Pageable pageable) {
+        return danhMucRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<DanhMuc> searchDanhMuc(String keyword, Integer trangThai, Pageable pageable) {
+        return danhMucRepository.searchDanhMuc(keyword, trangThai, pageable);
     }
 
 }

@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.SanPham;
@@ -66,6 +68,16 @@ public class SanPhamServiceImpl implements SanPhamService {
 
         sanPhamRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<SanPham> getAllSanPhamPage(Pageable pageable) {
+        return sanPhamRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<SanPham> searchSanPham(String keyword, Integer trangThai, Pageable pageable) {
+        return sanPhamRepository.searchSanPham(keyword, trangThai, pageable);
     }
 
 }

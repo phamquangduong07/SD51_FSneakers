@@ -2,8 +2,9 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import com.sd51.fsneakers.features.product.repositories.SanPhamChiTietRepository;
@@ -79,6 +80,16 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         }
         sanPhamChiTietRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<SanPhamChiTiet> getAllSanPhamChiTietPage(Pageable pageable) {
+        return sanPhamChiTietRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<SanPhamChiTiet> searchSanPhamChiTiet(String keyword, Integer trangThai, Pageable pageable) {
+        return sanPhamChiTietRepository.searchSanPhamChiTiet(keyword, trangThai, pageable);
     }
 
 }

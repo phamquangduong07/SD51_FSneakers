@@ -2,15 +2,11 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import com.sd51.fsneakers.features.product.services.SanPhamChiTietService;
@@ -46,5 +42,21 @@ public class SanPhamChiTietController {
     @DeleteMapping("/delete/{ma}")
     public SanPhamChiTiet deleteSanPhamChiTiet(@PathVariable String ma) {
         return ResponseEntity.ok(sanPhamChiTietService.deleteSanPhamChiTiet(ma)).getBody();
+    }
+
+    @GetMapping("/page")
+    public Page<SanPhamChiTiet> getAllSanPhamChiTietPage(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTietPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<SanPhamChiTiet> searchSanPhamChiTiet(@RequestParam (required = false) String keyword,
+                                     @RequestParam (required = false) Integer trangThai,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return  sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable);
     }
 }

@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.KichThuoc;
@@ -33,7 +35,7 @@ public class KichThuocServiceImpl implements KichThuocService {
     public KichThuoc createKichThuoc(KichThuoc kichThuoc) {
         if (kichThuocRepository.findByMa(kichThuoc.getMa()) != null) {
             throw new RuntimeException("Mã kích thước '" + kichThuoc.getMa() + "' đã tồn tại.");
-            
+
         }
         return kichThuocRepository.save(kichThuoc);
     }
@@ -64,6 +66,16 @@ public class KichThuocServiceImpl implements KichThuocService {
         }
         kichThuocRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<KichThuoc> getAllKichThuocPage(Pageable pageable) {
+        return kichThuocRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<KichThuoc> searchKichThuoc(String keyword, Integer trangThai, Pageable pageable) {
+        return kichThuocRepository.searchKichThuoc(keyword, trangThai, pageable);
     }
 
 }

@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.sd51.fsneakers.features.product.entity.KichThuoc;
 
 public interface KichThuocService {
@@ -15,4 +18,8 @@ public interface KichThuocService {
     KichThuoc updateKichThuoc(String ma, KichThuoc kichThuocUpdate);
 
     KichThuoc deleteKichThuoc(String maKichThuoc);
+
+    Page<KichThuoc> getAllKichThuocPage(Pageable pageable);
+
+    Page<KichThuoc> searchKichThuoc(String keyword, Integer trangThai, Pageable pageable);
 }

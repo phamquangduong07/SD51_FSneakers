@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.HinhAnhSanPham;
@@ -40,7 +42,7 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
 
     @Override
     public HinhAnhSanPham updateHinhAnhSanPham(String ma, HinhAnhSanPham hinhAnhSanPhamUpdate) {
-         HinhAnhSanPham existing = findByMa(ma);
+        HinhAnhSanPham existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã hình ảnh sản phẩm '" + ma + "' không tồn tại!");
 
@@ -69,6 +71,16 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
         }
         hinhAnhSanPhamRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<HinhAnhSanPham> getAllHinhAnhSanPhamPage(Pageable pageable) {
+        return hinhAnhSanPhamRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<HinhAnhSanPham> searchHinhAnhSanPham(String keyword, Integer trangThai, Pageable pageable) {
+        return hinhAnhSanPhamRepository.searchHinhAnhSanPham(keyword, trangThai, pageable);
     }
 
 }

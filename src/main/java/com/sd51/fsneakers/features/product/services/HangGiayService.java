@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.sd51.fsneakers.features.product.entity.HangGiay;
 
 public interface HangGiayService {
@@ -16,4 +19,7 @@ public interface HangGiayService {
 
     HangGiay deleteHangGiay(String ma);
 
+    Page<HangGiay> getAllHangGiayPage(Pageable pageable);
+
+    Page<HangGiay> searchHangGiay(String keyword, Integer trangThai, Pageable pageable);
 }

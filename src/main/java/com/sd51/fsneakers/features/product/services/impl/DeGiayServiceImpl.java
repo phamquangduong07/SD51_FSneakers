@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.DeGiay;
@@ -68,6 +70,16 @@ public class DeGiayServiceImpl implements DeGiayService {
         }
         deGiayRepository.delete(existing);
         return existing;
+    }
+
+    @Override
+    public Page<DeGiay> getAllDeGiayPage(Pageable pageable) {
+        return deGiayRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<DeGiay> searchDeGiay(String keyword, Integer trangThai, Pageable pageable) {
+        return deGiayRepository.searchDeGiay(keyword, trangThai, pageable);
     }
 
 }
