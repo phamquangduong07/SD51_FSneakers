@@ -2,7 +2,8 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import com.sd51.fsneakers.features.product.entity.ChatLieu;
 import com.sd51.fsneakers.features.product.services.ChatLieuService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v1/api/chat-lieu")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class ChatLieuController {
-    private final ChatLieuService chatLieuService;
+    ChatLieuService chatLieuService;
 
     @GetMapping({"", "/"})
     public List<ChatLieu> getAllChatLieu(){

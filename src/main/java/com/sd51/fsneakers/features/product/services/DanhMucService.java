@@ -1,7 +1,6 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.entity.DanhMuc;
 

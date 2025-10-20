@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sd51.fsneakers.features.product.entity.DeGiay;
 import com.sd51.fsneakers.features.product.services.DeGiayService;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("v1/api/de-giay")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DeGiayController {
 
-    @Autowired
-    private DeGiayService deGiayService;
+    DeGiayService deGiayService;
 
     @GetMapping({ "", "/" })
     public List<DeGiay> getAllDeGiay() {

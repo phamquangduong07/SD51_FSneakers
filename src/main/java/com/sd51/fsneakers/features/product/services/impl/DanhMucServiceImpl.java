@@ -2,18 +2,22 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.DanhMuc;
 import com.sd51.fsneakers.features.product.repositories.DanhMucRepository;
 import com.sd51.fsneakers.features.product.services.DanhMucService;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DanhMucServiceImpl implements DanhMucService {
 
-    @Autowired
-    private DanhMucRepository danhMucRepository;
+    DanhMucRepository danhMucRepository;
 
     @Override
     public DanhMuc createDanhMuc(DanhMuc danhMuc) {

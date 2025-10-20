@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sd51.fsneakers.features.product.entity.DanhMuc;
 import com.sd51.fsneakers.features.product.services.DanhMucService;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("v1/api/danh-muc")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DanhMucController {
 
-    @Autowired
-    private DanhMucService danhMucService;
+    DanhMucService danhMucService;
 
     @GetMapping({ "", "/" })
     public List<DanhMuc> getAll() {

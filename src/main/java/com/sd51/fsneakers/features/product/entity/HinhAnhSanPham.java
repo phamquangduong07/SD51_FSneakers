@@ -1,9 +1,15 @@
 package com.sd51.fsneakers.features.product.entity;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.UUID;
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" }) // Bỏ qua field kỹ thuật của Hibernate khi lazy load
 @Entity
 @Table(name = "hinh_anh")
 @Getter
@@ -11,25 +17,33 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HinhAnhSanPham extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uniqueidentifier")
-    private UUID id;
+    UUID id;
 
     @Column(nullable = false, unique = true, length = 255)
-    private String ma;
+    String ma;
 
     @Column(length = 255)
-    private String ten;
+    String ten;
 
     @Column(length = 500)
-    private String url;
+    String url;
 
     @Column(name = "trang_thai", nullable = false)
-    private Integer trangThai;
+    Integer trangThai;
 
+    /**
+     * 🖼️ Entity: Hình ảnh sản phẩm
+     * - Một hình ảnh thuộc về 1 sản phẩm chi tiết.
+     * - Dùng @JsonBackReference để không serialize ngược lên sản phẩm, tránh vòng
+     * lặp JSON.
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chi_tiet_san_pham_id", nullable = false)
-    private SanPhamChiTiet chiTietSanPham;
+    @JsonBackReference // Không serialize ngược lại (tránh vòng lặp JSON)
+    SanPhamChiTiet chiTietSanPham;
 }

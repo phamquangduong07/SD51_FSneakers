@@ -2,18 +2,22 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sd51.fsneakers.features.product.entity.DeGiay;
 import com.sd51.fsneakers.features.product.repositories.DeGiayRepository;
 import com.sd51.fsneakers.features.product.services.DeGiayService;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DeGiayServiceImpl implements DeGiayService {
 
-    @Autowired
-    private DeGiayRepository deGiayRepository;
+    DeGiayRepository deGiayRepository;
 
     @Override
     public List<DeGiay> getAllDeGiay() {
