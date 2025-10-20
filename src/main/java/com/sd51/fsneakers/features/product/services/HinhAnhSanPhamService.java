@@ -28,4 +28,6 @@ public interface HinhAnhSanPhamService {
     List<HinhAnhSanPham> updloadImage(UUID chiTietSanPhamId, List<MultipartFile> files) throws IOException;
 
     List<HinhAnhSanPham> getImagesByChiTietId(UUID chiTietId);
+
+    HinhAnhSanPham uploadAndSaveImage(MultipartFile file, String ma, String ten, Integer trangThai, UUID chiTietSanPhamId) throws IOException;
 }

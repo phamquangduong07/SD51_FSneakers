@@ -25,9 +25,9 @@ spring:
         dialect: org.hibernate.dialect.SQLServerDialect
 
 cloudinary:
-  cloud-name: ${CLOUDINARY_CLOUD_NAME}
-  api-key: ${CLOUDINARY_API_KEY}
-  api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: drtrpwvpc
+  api-key: 914935546269538
+  api-secret: hI2kdum0LWtvISeM6_jj18SGJdc
 
 server:
   port: 8081

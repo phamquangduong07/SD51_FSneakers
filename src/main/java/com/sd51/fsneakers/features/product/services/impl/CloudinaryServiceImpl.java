@@ -27,4 +27,10 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 ObjectUtils.asMap("folder", "fsneakers")); // Thư mục lưu ảnh
         return uploadResult.get("secure_url").toString(); // Trả link public
     }
+
+    @Override
+    public Map uploadFileImage(MultipartFile file) throws IOException {
+        return cloudinary.uploader().upload(file.getBytes(),
+                ObjectUtils.emptyMap()); // Thư mục lưu ảnh
+    }
 }

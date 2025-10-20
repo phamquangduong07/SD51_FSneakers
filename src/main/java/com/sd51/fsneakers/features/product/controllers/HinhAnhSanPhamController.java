@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sd51.fsneakers.features.product.entity.HinhAnhSanPham;
@@ -49,18 +48,18 @@ public class HinhAnhSanPhamController {
 
     @GetMapping("/page")
     public Page<HinhAnhSanPham> getAllHinhAnhSanPhamPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhSanPhamPage(pageable)).getBody();
     }
 
     @GetMapping("/search")
-    public Page<HinhAnhSanPham> searchHinhAnhSanPham(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
+    public Page<HinhAnhSanPham> searchHinhAnhSanPham(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return  hinhAnhSanPhamService.searchHinhAnhSanPham(keyword, trangThai, pageable);
+        return hinhAnhSanPhamService.searchHinhAnhSanPham(keyword, trangThai, pageable);
     }
 
     @PostMapping(value = "/upload/{chiTietId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -82,6 +81,21 @@ public class HinhAnhSanPhamController {
             return ResponseEntity.ok(images);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("ma") String ma,
+            @RequestParam("ten") String ten,
+            @RequestParam("trangThai") Integer trangThai,
+            @RequestParam("chiTietSanPham") UUID chiTietSanPhamId) {
+        try {
+            HinhAnhSanPham result = hinhAnhSanPhamService.uploadAndSaveImage(file, ma, ten, trangThai, chiTietSanPhamId);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
