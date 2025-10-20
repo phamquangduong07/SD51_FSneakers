@@ -1,18 +1,21 @@
-
 spring:
   application:
     name: FSneakers
+
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=FSneakers;encrypt=true;trustServerCertificate=true
     username: sa
     password: 123
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
   output:
     ansi:
       enabled: ALWAYS
+
   web:
     resources:
       static-locations: classpath:/static/
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -20,5 +23,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+
 server:
   port: 8081
