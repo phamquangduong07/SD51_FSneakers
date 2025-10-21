@@ -28,6 +28,22 @@ public class SanPhamChiTietController {
         return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTiet()).getBody();
     }
 
+    @GetMapping("/page")
+    public Page<SanPhamChiTiet> getAllSanPhamChiTietPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTietPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<SanPhamChiTiet> searchSanPhamChiTiet(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable);
+    }
+
     @PostMapping("/add")
     public SanPhamChiTiet createSanPhamChiTiet(@RequestBody SanPhamChiTiet sanPhamChiTiet) {
         return ResponseEntity.ok(sanPhamChiTietService.createSanPhamChiTiet(sanPhamChiTiet)).getBody();
@@ -44,19 +60,4 @@ public class SanPhamChiTietController {
         return ResponseEntity.ok(sanPhamChiTietService.deleteSanPhamChiTiet(ma)).getBody();
     }
 
-    @GetMapping("/page")
-    public Page<SanPhamChiTiet> getAllSanPhamChiTietPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTietPage(pageable)).getBody();
-    }
-
-    @GetMapping("/search")
-    public Page<SanPhamChiTiet> searchSanPhamChiTiet(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return  sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable);
-    }
 }

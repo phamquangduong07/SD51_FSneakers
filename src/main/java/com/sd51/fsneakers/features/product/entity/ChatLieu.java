@@ -32,9 +32,7 @@ public class ChatLieu extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
-    
-
-    public ChatLieu( String ma, String ten, Integer trangThai) {
+    public ChatLieu(String ma, String ten, Integer trangThai) {
 
         this.ma = ma;
         this.ten = ten;

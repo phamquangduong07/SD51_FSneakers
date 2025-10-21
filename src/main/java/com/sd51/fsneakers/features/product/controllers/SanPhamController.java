@@ -28,6 +28,22 @@ public class SanPhamController {
         return ResponseEntity.ok(sanPhamService.getAllSanPham()).getBody();
     }
 
+    @GetMapping("/page")
+    public Page<SanPham> getAllSanPhamPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(sanPhamService.getAllSanPhamPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<SanPham> searchSanPham(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return sanPhamService.searchSanPham(keyword, trangThai, pageable);
+    }
+
     @PostMapping("/add")
     public SanPham createSanPham(@RequestBody SanPham sanPham) {
         return ResponseEntity.ok(sanPhamService.createSanPham(sanPham)).getBody();
@@ -41,22 +57,6 @@ public class SanPhamController {
     @DeleteMapping("/delete/{ma}")
     public SanPham deleteSanPham(@PathVariable String ma) {
         return ResponseEntity.ok(sanPhamService.deleteSanPham(ma)).getBody();
-    }
-
-    @GetMapping("/page")
-    public Page<SanPham> getAllSanPhamPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(sanPhamService.getAllSanPhamPage(pageable)).getBody();
-    }
-
-    @GetMapping("/search")
-    public Page<SanPham> searchSanPham(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return  sanPhamService.searchSanPham(keyword, trangThai, pageable);
     }
 
 }

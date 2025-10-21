@@ -37,21 +37,6 @@ public class DanhMucController {
         return ResponseEntity.ok(danhMucService.getAllDanhMuc()).getBody();
     }
 
-    @PostMapping("/add")
-    public DanhMuc createDanhMuc(@RequestBody DanhMuc danhMuc) {
-        return ResponseEntity.ok(danhMucService.createDanhMuc(danhMuc)).getBody();
-    }
-
-    @PutMapping("/update/{ma}")
-    public DanhMuc updateDanhMuc(@PathVariable String ma, @RequestBody DanhMuc danhMuc) {
-        return ResponseEntity.ok(danhMucService.updateDanhMucByMa(ma, danhMuc)).getBody();
-    }
-
-    @DeleteMapping("/delete/{ma}")
-    public DanhMuc deleteDanhMuc(@PathVariable String ma) {
-        return ResponseEntity.ok(danhMucService.deleteDanhMuc(ma)).getBody();
-    }
-
     @GetMapping("/page")
     public Page<DanhMuc> getAllDanhMucPage(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -70,6 +55,21 @@ public class DanhMucController {
         return ResponseEntity
                 .ok(danhMucService.searchDanhMuc(keyword, trangThai, pageable))
                 .getBody();
+    }
+
+    @PostMapping("/add")
+    public DanhMuc createDanhMuc(@RequestBody DanhMuc danhMuc) {
+        return ResponseEntity.ok(danhMucService.createDanhMuc(danhMuc)).getBody();
+    }
+
+    @PutMapping("/update/{ma}")
+    public DanhMuc updateDanhMuc(@PathVariable String ma, @RequestBody DanhMuc danhMuc) {
+        return ResponseEntity.ok(danhMucService.updateDanhMucByMa(ma, danhMuc)).getBody();
+    }
+
+    @DeleteMapping("/delete/{ma}")
+    public DanhMuc deleteDanhMuc(@PathVariable String ma) {
+        return ResponseEntity.ok(danhMucService.deleteDanhMuc(ma)).getBody();
     }
 
 }

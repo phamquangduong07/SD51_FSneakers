@@ -28,6 +28,22 @@ public class KichThuocController {
         return ResponseEntity.ok(kichThuocService.getAllKichThuoc()).getBody();
     }
 
+    @GetMapping("/page")
+    public Page<KichThuoc> getAllKichThuocPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(kichThuocService.getAllKichThuocPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<KichThuoc> searchKichThuoc(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return kichThuocService.searchKichThuoc(keyword, trangThai, pageable);
+    }
+
     @PostMapping("/add")
     public KichThuoc createKichThuoc(@RequestBody KichThuoc kichThuoc) {
         return ResponseEntity.ok(kichThuocService.createKichThuoc(kichThuoc)).getBody();
@@ -44,19 +60,4 @@ public class KichThuocController {
         return ResponseEntity.ok(kichThuocService.deleteKichThuoc(ma)).getBody();
     }
 
-    @GetMapping("/page")
-    public Page<KichThuoc> getAllKichThuocPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(kichThuocService.getAllKichThuocPage(pageable)).getBody();
-    }
-
-    @GetMapping("/search")
-    public Page<KichThuoc> searchKichThuoc(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return  kichThuocService.searchKichThuoc(keyword, trangThai, pageable);
-    }
 }

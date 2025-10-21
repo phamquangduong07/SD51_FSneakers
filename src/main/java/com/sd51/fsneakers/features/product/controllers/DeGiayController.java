@@ -29,6 +29,22 @@ public class DeGiayController {
         return ResponseEntity.ok(deGiayService.getAllDeGiay()).getBody();
     }
 
+    @GetMapping("/page")
+    public Page<DeGiay> getAllDeGiayPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(deGiayService.getAllDeGiayPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<DeGiay> searchDeGiay(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return deGiayService.searchDeGiay(keyword, trangThai, pageable);
+    }
+
     @PostMapping("/add")
     public DeGiay addDeGiay(@RequestBody DeGiay deGiay) {
         return ResponseEntity.ok(deGiayService.createDeGiay(deGiay)).getBody();
@@ -43,22 +59,5 @@ public class DeGiayController {
     public DeGiay deleteDeGiay(@PathVariable("ma") String ma) {
         return ResponseEntity.ok(deGiayService.deleteDeGiay(ma)).getBody();
     }
-
-    @GetMapping("/page")
-    public Page<DeGiay> getAllDeGiayPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(deGiayService.getAllDeGiayPage(pageable)).getBody();
-    }
-
-    @GetMapping("/search")
-    public Page<DeGiay> searchDeGiay(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return  deGiayService.searchDeGiay(keyword, trangThai, pageable);
-    }
-
 
 }

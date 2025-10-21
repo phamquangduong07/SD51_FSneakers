@@ -1,14 +1,11 @@
 package com.sd51.fsneakers.features.product.controllers;
 
-
-
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import com.sd51.fsneakers.features.product.services.impl.CloudinaryServiceImpl;
 
@@ -24,6 +21,8 @@ public class UploadImageController {
 
     CloudinaryServiceImpl cloudinaryService;
 
+    // Upload image to Cloudinary and return the URL
+    // Tải lên ảnh với cloudinary và trả về URL
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
         try {

@@ -28,6 +28,22 @@ public class MauSacController {
         return ResponseEntity.ok(mauSacService.getAllMauSac()).getBody();
     }
 
+    @GetMapping("/page")
+    public Page<MauSac> getAllMauSacPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(mauSacService.getAllMauSacPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<MauSac> searchMauSac(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return mauSacService.searchMauSac(keyword, trangThai, pageable);
+    }
+
     @PostMapping("/add")
     public MauSac createMauSac(@RequestBody MauSac mauSac) {
         return ResponseEntity.ok(mauSacService.createMauSac(mauSac)).getBody();
@@ -41,22 +57,6 @@ public class MauSacController {
     @DeleteMapping("/delete/{ma}")
     public MauSac deleteMauSac(@PathVariable String ma) {
         return ResponseEntity.ok(mauSacService.deleteMauSac(ma)).getBody();
-    }
-
-    @GetMapping("/page")
-    public Page<MauSac> getAllMauSacPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(mauSacService.getAllMauSacPage(pageable)).getBody();
-    }
-
-    @GetMapping("/search")
-    public Page<MauSac> searchMauSac(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return  mauSacService.searchMauSac(keyword, trangThai, pageable);
     }
 
 }

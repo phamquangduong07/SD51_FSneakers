@@ -28,6 +28,22 @@ public class HangGiayController {
         return ResponseEntity.ok(hangGiayService.getAllHangGiay()).getBody();
     }
 
+    @GetMapping("/page")
+    public Page<HangGiay> getAllHangGiayPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(hangGiayService.getAllHangGiayPage(pageable)).getBody();
+    }
+
+    @GetMapping("/search")
+    public Page<HangGiay> searchHangGiay(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return hangGiayService.searchHangGiay(keyword, trangThai, pageable);
+    }
+
     @PostMapping("/add")
     public HangGiay createHangGiay(@RequestBody HangGiay hangGiay) {
         return ResponseEntity.ok(hangGiayService.createHangGiay(hangGiay)).getBody();
@@ -43,19 +59,4 @@ public class HangGiayController {
         return ResponseEntity.ok(hangGiayService.deleteHangGiay(ma)).getBody();
     }
 
-    @GetMapping("/page")
-    public Page<HangGiay> getAllHangGiayPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(hangGiayService.getAllHangGiayPage(pageable)).getBody();
-    }
-
-    @GetMapping("/search")
-    public Page<HangGiay> searchHangGiay(@RequestParam (required = false) String keyword,
-                                     @RequestParam (required = false) Integer trangThai,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return  hangGiayService.searchHangGiay(keyword, trangThai, pageable);
-    }
 }

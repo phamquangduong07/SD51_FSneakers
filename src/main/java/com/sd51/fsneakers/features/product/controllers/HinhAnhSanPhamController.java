@@ -30,22 +30,6 @@ public class HinhAnhSanPhamController {
         return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhBySanPham()).getBody();
     }
 
-    @PostMapping("/add")
-    public HinhAnhSanPham createHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPham) {
-        return ResponseEntity.ok(hinhAnhSanPhamService.createHinhAnhSanPham(hinhAnhSanPham)).getBody();
-    }
-
-    @PutMapping("/update/{ma}")
-    public HinhAnhSanPham updateHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPhamUpdate,
-            @PathVariable String ma) {
-        return ResponseEntity.ok(hinhAnhSanPhamService.updateHinhAnhSanPham(ma, hinhAnhSanPhamUpdate)).getBody();
-    }
-
-    @DeleteMapping("/delete/{ma}")
-    public HinhAnhSanPham deleteHinhAnhSanPham(@PathVariable String ma) {
-        return ResponseEntity.ok(hinhAnhSanPhamService.deleteHinhAnhSanPham(ma)).getBody();
-    }
-
     @GetMapping("/page")
     public Page<HinhAnhSanPham> getAllHinhAnhSanPhamPage(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -62,6 +46,41 @@ public class HinhAnhSanPhamController {
         return hinhAnhSanPhamService.searchHinhAnhSanPham(keyword, trangThai, pageable);
     }
 
+    @PostMapping("/add")
+    public HinhAnhSanPham createHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPham) {
+        return ResponseEntity.ok(hinhAnhSanPhamService.createHinhAnhSanPham(hinhAnhSanPham)).getBody();
+    }
+
+    @PutMapping("/update/{ma}")
+    public HinhAnhSanPham updateHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPhamUpdate,
+            @PathVariable String ma) {
+        return ResponseEntity.ok(hinhAnhSanPhamService.updateHinhAnhSanPham(ma, hinhAnhSanPhamUpdate)).getBody();
+    }
+
+    @DeleteMapping("/delete/{ma}")
+    public HinhAnhSanPham deleteHinhAnhSanPham(@PathVariable String ma) {
+        return ResponseEntity.ok(hinhAnhSanPhamService.deleteHinhAnhSanPham(ma)).getBody();
+    }
+
+    // Upload image Cloudinary và upload(update) database
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("ma") String ma,
+            @RequestParam("ten") String ten,
+            @RequestParam("trangThai") Integer trangThai,
+            @RequestParam("chiTietSanPham") UUID chiTietSanPhamId) {
+        try {
+            HinhAnhSanPham result = hinhAnhSanPhamService.uploadAndSaveImage(file, ma, ten, trangThai,
+                    chiTietSanPhamId);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Upload multiple images for a specific ChiTietSanPham ID
+    // Chỉ upload Cloudinary không upload database
     @PostMapping(value = "/upload/{chiTietId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(
             @PathVariable UUID chiTietId,
@@ -74,6 +93,7 @@ public class HinhAnhSanPhamController {
         }
     }
 
+    // Lấy danh sách hình ảnh theo ChiTietSanPham ID
     @GetMapping("/{chiTietId}")
     public ResponseEntity<?> getImages(@PathVariable UUID chiTietId) {
         try {
@@ -84,18 +104,4 @@ public class HinhAnhSanPhamController {
         }
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadImage(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("ma") String ma,
-            @RequestParam("ten") String ten,
-            @RequestParam("trangThai") Integer trangThai,
-            @RequestParam("chiTietSanPham") UUID chiTietSanPhamId) {
-        try {
-            HinhAnhSanPham result = hinhAnhSanPhamService.uploadAndSaveImage(file, ma, ten, trangThai, chiTietSanPhamId);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 }
