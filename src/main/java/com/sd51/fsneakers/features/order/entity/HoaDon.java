@@ -1,17 +1,19 @@
 package com.sd51.fsneakers.features.order.entity;
 
 import com.sd51.fsneakers.commons.BaseEntity;
+import com.sd51.fsneakers.features.order.enums.OrderStatus;
+import com.sd51.fsneakers.features.user.entity.KhachHang;
+import com.sd51.fsneakers.features.user.entity.NhanVien;
+import com.sd51.fsneakers.features.voucher.enitty.Voucher;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -20,6 +22,7 @@ import java.util.UUID;
 @Table(name = "hoa_don")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class HoaDon extends BaseEntity {
     @Id
     @GeneratedValue
@@ -44,7 +47,7 @@ public class HoaDon extends BaseEntity {
     private String email;
 
     @Nationalized
-    @Column(name = "dia_chi", nullable = false, length = 255)
+    @Column(name = "dia_chi", length = 255)
     private String diaChi;
 
     @Nationalized
@@ -84,7 +87,7 @@ public class HoaDon extends BaseEntity {
     private BigDecimal soTienThanhToan;
 
     @Column(name = "trang_thai_hoa_don", columnDefinition = "int default 0")
-    private Integer trangThaiHoaDon = 0;
+    private OrderStatus status;
 
 
 
@@ -107,4 +110,7 @@ public class HoaDon extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
+
+    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HoaDonChiTiet> chiTietList;
 }

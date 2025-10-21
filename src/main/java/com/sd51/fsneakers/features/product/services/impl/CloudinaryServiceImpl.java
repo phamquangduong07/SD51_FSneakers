@@ -3,6 +3,7 @@ package com.sd51.fsneakers.features.product.services.impl;
 import java.io.IOException;
 import java.util.Map;
 
+import com.cloudinary.Cloudinary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

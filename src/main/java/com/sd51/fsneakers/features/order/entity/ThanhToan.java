@@ -2,10 +2,7 @@ package com.sd51.fsneakers.features.order.entity;
 
 import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -19,6 +16,7 @@ import java.util.prefs.BackingStoreException;
 @Table(name = "thanh_toan")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ThanhToan extends BaseEntity {
     @Id
     @GeneratedValue
@@ -43,6 +41,8 @@ public class ThanhToan extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     private Integer trangThai;
 
-
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "hoa_don_id", nullable = false)
+    private HoaDon hoaDon;
 
 }

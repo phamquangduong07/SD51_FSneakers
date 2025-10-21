@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface ThanhToanRepository extends JpaRepository<ThanhToan, UUID> {
+    ThanhToan findByHoaDon_Id(UUID hoaDonId);
 }

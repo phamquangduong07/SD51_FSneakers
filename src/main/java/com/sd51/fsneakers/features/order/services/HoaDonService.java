@@ -1,7 +1,31 @@
 package com.sd51.fsneakers.features.order.services;
 
+
+
+import com.sd51.fsneakers.features.order.dtos.requests.SanPhamChiTietRequest;
+import com.sd51.fsneakers.features.order.dtos.requests.ThanhToanRequest;
+import com.sd51.fsneakers.features.order.dtos.response.HoaDonChiTietResponse;
+import com.sd51.fsneakers.features.order.dtos.response.HoaDonResponse;
+import com.sd51.fsneakers.features.order.entity.HoaDon;
+import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
+import com.sd51.fsneakers.features.user.entity.NhanVien;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
 public interface HoaDonService {
-/*
+    HoaDonResponse createHoaDon(String maNhanVien);
+    HoaDonChiTietResponse  addSanPham(String maHoaDon, SanPhamChiTietRequest sanPhamChiTiet);
+    HoaDonChiTietResponse deleteSanPham(UUID hoaDonChiTietId);
+    HoaDonChiTietResponse updateSoLuongSanPham(UUID idHDCT, int soLuongMoi);
+    HoaDonResponse addKhachHang(String maHoaDon, String soDienThoaiKH);
+    HoaDonResponse tinhTien(String maHoaDon);
+    HoaDonResponse thanhToan(String maHoaDon,ThanhToanRequest thanhToanRequest);
+    List<HoaDonChiTietResponse> getAllHoaDonChiTiet(UUID hoaDonId);
+    HoaDonResponse deleteHoaDon(String maHoaDon);
+
+    /*
 *  // 1️⃣ Tạo hóa đơn tạm cho khách tại quầy
     HoaDonResponse taoHoaDonTam(UUID nhanVienId);
 

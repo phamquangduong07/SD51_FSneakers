@@ -35,12 +35,8 @@ public class HoaDonChiTiet {
     private Integer soLuong;
 
     @ColumnDefault("0")
-    @Column(name = "gia_giam", precision = 18)
-    private BigDecimal giaGiam;
-
-    @ColumnDefault("0")
-    @Column(name = "gia_sau_giam", precision = 18)
-    private BigDecimal giaSauGiam;
+    @Column(name = "don_gia", precision = 18)
+    private BigDecimal donGia;
 
     @Column(name = "trang_thai", nullable = false)
     private Integer trangThai;
