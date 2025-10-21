@@ -1,13 +1,17 @@
 package com.sd51.fsneakers.features.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sd51.fsneakers.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" }) // Bỏ qua field kỹ thuật của Hibernate khi lazy load
 @Entity
 @Table(name = "chi_tiet_san_pham")
 @Getter
@@ -15,70 +19,76 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SanPhamChiTiet extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uniqueidentifier")
-    private UUID id;
+    UUID id;
 
     @Column(nullable = false, unique = true, length = 255)
-    private String ma;
+    String ma;
 
     @Column(name = "ma_qr", unique = true, length = 255)
-    private String maQr;
+    String maQr;
 
     @Column(name = "gia_ban", nullable = false, precision = 18, scale = 0)
-    private BigDecimal giaBan;
+    BigDecimal giaBan;
 
     @Column(name = "gia_nhap", precision = 18, scale = 0)
-    private BigDecimal giaNhap;
+    BigDecimal giaNhap;
 
     @Column(name = "so_luong", nullable = false)
-    private Integer soLuong ;
+    Integer soLuong;
 
     @Column(name = "mo_ta", columnDefinition = "NVARCHAR(MAX)")
-    private String moTa;
+    String moTa;
 
     @Column(name = "trang_thai", nullable = false)
-    private Integer trangThai;
-
-
+    Integer trangThai;
 
     @Column(name = "nguoi_tao")
-    private String nguoiTao;
+    String nguoiTao;
 
     @Column(name = "nguoi_sua")
-    private String nguoiSua;
+    String nguoiSua;
 
     // 🔗 Quan hệ tới các bảng khác
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_lieu_id", nullable = false)
-    private ChatLieu chatLieu;
+    ChatLieu chatLieu;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "danh_muc_id", nullable = false)
-    private DanhMuc danhMuc;
+    DanhMuc danhMuc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "de_giay_id", nullable = false)
-    private DeGiay deGiay;
+    DeGiay deGiay;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hang_id", nullable = false)
-    private HangGiay hangGiay;
+    HangGiay hangGiay;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kich_thuoc_id", nullable = false)
-    private KichThuoc kichThuoc;
+    KichThuoc kichThuoc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mau_sac_id", nullable = false)
-    private MauSac mauSac;
+    MauSac mauSac;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "san_pham_id", nullable = false)
-    private SanPham sanPham;
+    SanPham sanPham;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<HinhAnhSanPham> hinhAnhSanPhams;
+    /**
+     * - Một sản phẩm chi tiết có thể có nhiều hình ảnh.
+     * - Dùng @JsonManagedReference để Jackson chỉ serialize 1 chiều (từ cha ->
+     * con),
+     * tránh vòng lặp vô hạn khi chuyển sang JSON.
+     */
+    @OneToMany(mappedBy = "chiTietSanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference // Cho phép Jackson serialize ra JSON (bên cha)
+    List<HinhAnhSanPham> hinhAnhSanPhams;
 }

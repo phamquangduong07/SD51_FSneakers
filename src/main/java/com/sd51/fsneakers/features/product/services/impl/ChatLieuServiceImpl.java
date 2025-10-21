@@ -3,13 +3,23 @@ package com.sd51.fsneakers.features.product.services.impl;
 import com.sd51.fsneakers.features.product.entity.ChatLieu;
 import com.sd51.fsneakers.features.product.repositories.ChatLieuRepository;
 import com.sd51.fsneakers.features.product.services.ChatLieuService;
-import lombok.AllArgsConstructor;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ChatLieuServiceImpl implements ChatLieuService {
-    private final ChatLieuRepository chatLieuRepository;
+
+    ChatLieuRepository chatLieuRepository;
 
     @Override
     public ChatLieu createChatLieu(ChatLieu chatLieu) {
@@ -26,23 +36,48 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
-    public ChatLieu updateChatLieuByMa(String ma, ChatLieu chatLieuNew) {
+    public ChatLieu updateChatLieuByMa(String ma, ChatLieu chatLieuUpdate) {
         ChatLieu existing = findByMa(ma);
-        if(existing== null){
+        if (existing == null) {
             throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
         }
-        if(!chatLieuNew.getMa().equals(ma)){
-            if(findByMa(chatLieuNew.getMa())!=null){
-                throw new RuntimeException("Mã chất liệu '" + chatLieuNew.getMa() + "' đã tồn tại khác !");
-            }else {
+        if (!chatLieuUpdate.getMa().equals(ma)) {
+            if (findByMa(chatLieuUpdate.getMa()) != null) {
+                throw new RuntimeException("Mã chất liệu '" + chatLieuUpdate.getMa() + "' đã tồn tại khác !");
+            } else {
 
             }
         }
-        existing.setMa(chatLieuNew.getMa());
-        existing.setTen(chatLieuNew.getTen());
-        existing.setTrangThai(chatLieuNew.getTrangThai());
+        // Cập nhật các thuộc tính của existing với giá trị từ chatLieuUpdate
+        existing.setMa(chatLieuUpdate.getMa());
+        existing.setTen(chatLieuUpdate.getTen());
+        existing.setTrangThai(chatLieuUpdate.getTrangThai());
         return chatLieuRepository.save(existing);
     }
 
+    @Override
+    public ChatLieu deleteChatLieuByMa(String ma) {
+        ChatLieu existing = findByMa(ma);
+        if (existing == null) {
+            throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
+        }
+        chatLieuRepository.delete(existing);
+        return existing;
+    }
+
+    @Override
+    public List<ChatLieu> getAllChatLieu() {
+        return chatLieuRepository.findAll();
+    }
+
+    @Override
+    public Page<ChatLieu> getAllChatLieuPage(Pageable pageable) {
+       return chatLieuRepository.getAllPage(pageable);
+    }
+
+    @Override
+    public Page<ChatLieu> searchChatLieu(String keyword, Integer trangThai, Pageable pageable) {
+        return chatLieuRepository.searchChatLieu(keyword, trangThai, pageable);
+    }
 
 }
