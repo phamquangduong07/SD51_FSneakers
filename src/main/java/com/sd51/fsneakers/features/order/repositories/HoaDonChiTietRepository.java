@@ -1,6 +1,5 @@
 package com.sd51.fsneakers.features.order.repositories;
 
-import com.sd51.fsneakers.features.order.entity.HoaDon;
 import com.sd51.fsneakers.features.order.entity.HoaDonChiTiet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
