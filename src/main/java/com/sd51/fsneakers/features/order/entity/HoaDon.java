@@ -1,4 +1,5 @@
 package com.sd51.fsneakers.features.order.entity;
+import com.sd51.fsneakers.commons.BaseEntity;
 import com.sd51.fsneakers.features.voucher.Voucher;
 import com.sd51.fsneakers.features.user.entity.KhachHang;
 import com.sd51.fsneakers.features.user.entity.NhanVien;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HoaDon {
+public class HoaDon extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", columnDefinition = "uniqueidentifier")
@@ -30,7 +31,7 @@ public class HoaDon {
     @Column(name = "qr_code", length = 500)
     private String qrCode;
 
-    @Column(name = "ten_nguoi_nhan", nullable = false, length = 100)
+    @Column(name = "ten_nguoi_nhan", nullable = true, length = 100)
     private String tenNguoiNhan;
 
     @Column(name = "so_dien_thoai", nullable = false, length = 20)
