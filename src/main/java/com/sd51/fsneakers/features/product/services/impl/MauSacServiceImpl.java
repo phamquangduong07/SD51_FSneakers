@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.mapper.MauSacMapper;
+import com.sd51.fsneakers.features.product.dto.request.MauSacRequest;
+import com.sd51.fsneakers.features.product.dto.response.MauSacResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,18 @@ public class MauSacServiceImpl implements MauSacService {
     MauSacRepository mauSacRepository;
 
     @Override
-    public List<MauSac> getAllMauSac() {
-        return mauSacRepository.findAll();
+    public List<MauSacResponse> getAllMauSac() {
+        return mauSacRepository.findAll().stream().map(MauSacMapper::toResponse).toList();
+    }
+
+    @Override
+    public Page<MauSacResponse> getAllMauSacPage(Pageable pageable) {
+        return mauSacRepository.getAllPage(pageable).map(MauSacMapper::toResponse);
+    }
+
+    @Override
+    public Page<MauSacResponse> searchMauSac(String keyword, Integer trangThai, Pageable pageable) {
+        return mauSacRepository.searchMauSac(keyword, trangThai, pageable).map(MauSacMapper::toResponse);
     }
 
     @Override
@@ -32,50 +45,41 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
-    public MauSac createMauSac(MauSac mauSac) {
-        if (mauSacRepository.findByMa(mauSac.getMa()) != null) {
-            throw new IllegalArgumentException("Mã màu sắc '" + mauSac.getMa() + "' đã tồn tại.");
+    public MauSacResponse createMauSac(MauSacRequest request) {
+        if (mauSacRepository.findByMa(request.getMa()) != null) {
+            throw new RuntimeException("Mã màu sắc '" + request.getMa() + "' đã tồn tại.");
         }
-        return mauSacRepository.save(mauSac);
+        MauSac mauSac = MauSacMapper.toEntity(request);
+        mauSacRepository.save(mauSac);
+        return MauSacMapper.toResponse(mauSac);
     }
 
     @Override
-    public MauSac updateMauSac(String ma, MauSac mauSacUpdate) {
+    public MauSacResponse updateMauSac(String ma, MauSacRequest request) {
         MauSac existing = findByMa(ma);
         if (existing == null) {
-            throw new IllegalArgumentException("Mã màu sắc '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Mã màu sắc '" + ma + "' không tồn tại.");
         }
-        if (!mauSacUpdate.getMa().equals(ma)) {
-            if (findByMa(mauSacUpdate.getMa()) != null) {
-                throw new IllegalArgumentException("Mã màu sắc '" + mauSacUpdate.getMa() + "' đã tồn tại!");
+        if (!request.getMa().equals(ma)) {
+            if (findByMa(request.getMa()) != null) {
+                throw new RuntimeException("Mã màu sắc '" + request.getMa() + "' đã tồn tại!");
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ mauSacUpdate
-        existing.setMa(mauSacUpdate.getMa());
-        existing.setTen(mauSacUpdate.getTen());
-        existing.setTrangThai(mauSacUpdate.getTrangThai());
-        return mauSacRepository.save(existing);
+        MauSacMapper.toUpdate(existing, request);
+        MauSac update = mauSacRepository.save(existing);
+        return MauSacMapper.toResponse(update);
     }
 
     @Override
-    public MauSac deleteMauSac(String maMauSac) {
+    public void deleteMauSac(String maMauSac) {
         MauSac existing = findByMa(maMauSac);
         if (existing == null) {
-            throw new IllegalArgumentException("Mã màu sắc '" + maMauSac + "' không tồn tại.");
+            throw new RuntimeException("Mã màu sắc '" + maMauSac + "' không tồn tại.");
         }
 
         mauSacRepository.delete(existing);
-        return existing;
     }
 
-    @Override
-    public Page<MauSac> getAllMauSacPage(Pageable pageable) {
-        return mauSacRepository.getAllPage(pageable);
-    }
-
-    @Override
-    public Page<MauSac> searchMauSac(String keyword, Integer trangThai, Pageable pageable) {
-        return mauSacRepository.searchMauSac(keyword, trangThai, pageable);
-    }
 
 }

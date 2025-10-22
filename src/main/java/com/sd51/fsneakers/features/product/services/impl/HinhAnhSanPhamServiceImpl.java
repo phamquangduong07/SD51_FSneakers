@@ -5,6 +5,9 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.sd51.fsneakers.features.mapper.HinhAnhSanPhamMapper;
+import com.sd51.fsneakers.features.product.dto.request.HinhAnhSanPhamRequest;
+import com.sd51.fsneakers.features.product.dto.response.HinhAnhSanPhamResponse;
 import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import com.sd51.fsneakers.features.product.repositories.SanPhamChiTietRepository;
 import org.springframework.data.domain.Page;
@@ -29,14 +32,31 @@ import org.springframework.web.multipart.MultipartFile;
 public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
 
     HinhAnhSanPhamRepository hinhAnhSanPhamRepository;
+
     SanPhamChiTietRepository sanPhamChiTietRepository;
+
     CloudinaryService cloudinaryService;
 
     static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
     @Override
-    public List<HinhAnhSanPham> getAllHinhAnhBySanPham() {
-        return hinhAnhSanPhamRepository.findAll();
+    public List<HinhAnhSanPhamResponse> getAllHinhAnhBySanPham() {
+        return hinhAnhSanPhamRepository.findAll().stream().map(HinhAnhSanPhamMapper::toResponse).toList();
+    }
+
+    @Override
+    public Page<HinhAnhSanPhamResponse> getAllHinhAnhSanPhamPage(Pageable pageable) {
+        return hinhAnhSanPhamRepository.getAllPage(pageable).map(HinhAnhSanPhamMapper::toResponse);
+    }
+
+    @Override
+    public Page<HinhAnhSanPhamResponse> searchHinhAnhSanPham(String keyword, Integer trangThai, Pageable pageable) {
+        return hinhAnhSanPhamRepository.searchHinhAnhSanPham(keyword, trangThai, pageable).map(HinhAnhSanPhamMapper::toResponse);
+    }
+
+    @Override
+    public List<HinhAnhSanPham> getImagesByChiTietId(UUID chiTietId) {
+        return hinhAnhSanPhamRepository.findByChiTietSanPham_Id(chiTietId);
     }
 
     @Override
@@ -45,48 +65,40 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
     }
 
     @Override
-    public HinhAnhSanPham createHinhAnhSanPham(HinhAnhSanPham hinhAnhSanPham) {
-        if (hinhAnhSanPhamRepository.findByMa(hinhAnhSanPham.getMa()) != null) {
-            throw new IllegalArgumentException("Mã hình ảnh sản phẩm '" + hinhAnhSanPham.getMa() + "' đã tồn tại.");
+    public HinhAnhSanPhamResponse createHinhAnhSanPham(HinhAnhSanPhamRequest request) {
+        if (hinhAnhSanPhamRepository.findByMa(request.getMa()) != null) {
+            throw new RuntimeException("Mã hình ảnh sản phẩm '" + request.getMa() + "' đã tồn tại.");
         }
-        return hinhAnhSanPhamRepository.save(hinhAnhSanPham);
+        HinhAnhSanPham hinhAnhSanPham = HinhAnhSanPhamMapper.toEntity(request);
+        hinhAnhSanPhamRepository.save(hinhAnhSanPham);
+        return HinhAnhSanPhamMapper.toResponse(hinhAnhSanPham);
     }
 
     @Override
-    public HinhAnhSanPham updateHinhAnhSanPham(String ma, HinhAnhSanPham hinhAnhSanPhamUpdate) {
+    public HinhAnhSanPhamResponse updateHinhAnhSanPham(String ma, HinhAnhSanPhamRequest request) {
         HinhAnhSanPham existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã hình ảnh sản phẩm '" + ma + "' không tồn tại!");
         }
-
-        existing.setMa(hinhAnhSanPhamUpdate.getMa());
-        existing.setTen(hinhAnhSanPhamUpdate.getTen());
-        existing.setUrl(hinhAnhSanPhamUpdate.getUrl());
-        existing.setTrangThai(hinhAnhSanPhamUpdate.getTrangThai());
-        existing.setChiTietSanPham(hinhAnhSanPhamUpdate.getChiTietSanPham());
-
-        return hinhAnhSanPhamRepository.save(existing);
+        if (!request.getMa().equals(ma)) {
+            if (findByMa(request.getMa()) != null) {
+                throw new RuntimeException("Mã hình ảnh sản phẩm '" + request.getMa() + "' đã tồn tại!");
+            }
+        }
+        HinhAnhSanPhamMapper.toUpdate(existing, request);
+        HinhAnhSanPham update = hinhAnhSanPhamRepository.save(existing);
+        return HinhAnhSanPhamMapper.toResponse(update);
     }
 
     @Override
-    public HinhAnhSanPham deleteHinhAnhSanPham(String ma) {
+    public void deleteHinhAnhSanPham(String ma) {
         HinhAnhSanPham existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã hình ảnh sản phẩm '" + ma + "' không tồn tại!");
         }
         hinhAnhSanPhamRepository.delete(existing);
-        return existing;
     }
 
-    @Override
-    public Page<HinhAnhSanPham> getAllHinhAnhSanPhamPage(Pageable pageable) {
-        return hinhAnhSanPhamRepository.getAllPage(pageable);
-    }
-
-    @Override
-    public Page<HinhAnhSanPham> searchHinhAnhSanPham(String keyword, Integer trangThai, Pageable pageable) {
-        return hinhAnhSanPhamRepository.searchHinhAnhSanPham(keyword, trangThai, pageable);
-    }
 
     @Override
     public List<HinhAnhSanPham> updloadImage(UUID chiTietSanPhamId, List<MultipartFile> files) throws IOException {
@@ -132,18 +144,14 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
         return results;
     }
 
-    @Override
-    public List<HinhAnhSanPham> getImagesByChiTietId(UUID chiTietId) {
-        return hinhAnhSanPhamRepository.findByChiTietSanPham_Id(chiTietId);
-    }
 
     @Override
     public HinhAnhSanPham uploadAndSaveImage(MultipartFile file, String ma, String ten, Integer trangThai,
-            UUID chiTietSanPhamId)
+                                             UUID chiTietSanPhamId)
             throws IOException {
 
         if (hinhAnhSanPhamRepository.findByMa(ma) != null) {
-            throw new IllegalArgumentException("Mã hình ảnh sản phẩm '" + ma + "' đã tồn tại.");
+            throw new RuntimeException("Mã hình ảnh sản phẩm '" + ma + "' đã tồn tại.");
         }
 
         Map uploadResult = cloudinaryService.uploadFileImage(file);

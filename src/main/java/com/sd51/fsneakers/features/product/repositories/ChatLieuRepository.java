@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface ChatLieuRepository extends JpaRepository<ChatLieu, UUID> {
-    ChatLieu findByMa(String ma);
+        ChatLieu findByMa(String ma);
 
     //  Phân trang cơ bản (Spring Data tự sinh)
     @Query("SELECT c FROM ChatLieu c")

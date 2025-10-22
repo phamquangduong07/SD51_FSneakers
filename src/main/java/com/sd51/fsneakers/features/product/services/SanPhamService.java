@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.SanPhamRequest;
+import com.sd51.fsneakers.features.product.dto.response.SanPhamResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,18 +11,19 @@ import com.sd51.fsneakers.features.product.entity.SanPham;
 
 public interface SanPhamService {
 
-    List<SanPham> getAllSanPham();
+    List<SanPhamResponse> getAllSanPham();
+
+    Page<SanPhamResponse> getAllSanPhamPage(Pageable pageable);
+
+    Page<SanPhamResponse> searchSanPham(String keyword, Integer trangThai, Pageable pageable);
 
     SanPham findByMa(String maSanPham);
 
-    SanPham createSanPham(SanPham sanPham);
+    SanPhamResponse createSanPham(SanPhamRequest request);
 
-    SanPham updateSanPham(String ma, SanPham updateSanPham);
+    SanPhamResponse updateSanPham(String ma, SanPhamRequest request);
 
-    SanPham deleteSanPham(String maSanPham);
+    void deleteSanPham(String maSanPham);
 
-    Page<SanPham> getAllSanPhamPage(Pageable pageable);
-
-    Page<SanPham> searchSanPham(String keyword, Integer trangThai, Pageable pageable);
 
 }

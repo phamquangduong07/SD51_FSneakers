@@ -32,5 +32,8 @@ public class DanhMuc extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
+    public DanhMuc(UUID id) {
+        this.id =id;
+    }
 
 }

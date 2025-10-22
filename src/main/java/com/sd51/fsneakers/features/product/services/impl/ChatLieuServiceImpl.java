@@ -1,5 +1,8 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
+import com.sd51.fsneakers.features.mapper.ChatLieuMapper;
+import com.sd51.fsneakers.features.product.dto.request.ChatLieuRequest;
+import com.sd51.fsneakers.features.product.dto.response.ChatLieuResponse;
 import com.sd51.fsneakers.features.product.entity.ChatLieu;
 import com.sd51.fsneakers.features.product.repositories.ChatLieuRepository;
 import com.sd51.fsneakers.features.product.services.ChatLieuService;
@@ -22,12 +25,20 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     ChatLieuRepository chatLieuRepository;
 
     @Override
-    public ChatLieu createChatLieu(ChatLieu chatLieu) {
-        if (findByMa(chatLieu.getMa()) != null) {
-            throw new RuntimeException("Mã chất liệu '" + chatLieu.getMa() + "' đã tồn tại!");
-        }
+    public List<ChatLieuResponse> getAllChatLieu() {
+        return chatLieuRepository.findAll().stream()
+                .map(ChatLieuMapper::toResponse)
+                .toList();
+    }
 
-        return chatLieuRepository.save(chatLieu);
+    @Override
+    public Page<ChatLieuResponse> getAllChatLieuPage(Pageable pageable) {
+        return chatLieuRepository.getAllPage(pageable).map(ChatLieuMapper::toResponse);
+    }
+
+    @Override
+    public Page<ChatLieuResponse> searchChatLieu(String keyword, Integer trangThai, Pageable pageable) {
+        return chatLieuRepository.searchChatLieu(keyword, trangThai, pageable).map(ChatLieuMapper::toResponse);
     }
 
     @Override
@@ -35,8 +46,21 @@ public class ChatLieuServiceImpl implements ChatLieuService {
         return chatLieuRepository.findByMa(ma);
     }
 
+
     @Override
-    public ChatLieu updateChatLieuByMa(String ma, ChatLieu chatLieuUpdate) {
+    public ChatLieuResponse createChatLieu(ChatLieuRequest request) {
+        if (findByMa(request.getMa()) != null) {
+            throw new RuntimeException("Mã chất liệu '" + request.getMa() + "' đã tồn tại!");
+        }
+
+        ChatLieu chatLieu = ChatLieuMapper.toEntity(request);
+        chatLieuRepository.save(chatLieu);
+        return ChatLieuMapper.toResponse(chatLieu);
+    }
+
+
+    @Override
+    public ChatLieuResponse updateChatLieuByMa(String ma, ChatLieuRequest chatLieuUpdate) {
         ChatLieu existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
@@ -48,36 +72,22 @@ public class ChatLieuServiceImpl implements ChatLieuService {
 
             }
         }
-        // Cập nhật các thuộc tính của existing với giá trị từ chatLieuUpdate
-        existing.setMa(chatLieuUpdate.getMa());
-        existing.setTen(chatLieuUpdate.getTen());
-        existing.setTrangThai(chatLieuUpdate.getTrangThai());
-        return chatLieuRepository.save(existing);
+        // Cập nhật các field (tự động với MapStruct)
+        ChatLieuMapper.toUpdate(existing, chatLieuUpdate);
+        ChatLieu update = chatLieuRepository.save(existing);
+        return ChatLieuMapper.toResponse(update);
     }
 
     @Override
-    public ChatLieu deleteChatLieuByMa(String ma) {
+    public ChatLieuResponse deleteChatLieuByMa(String ma) {
         ChatLieu existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
         }
+        ChatLieuResponse deleteResponse = ChatLieuMapper.toResponse(existing);
         chatLieuRepository.delete(existing);
-        return existing;
+        return deleteResponse;
     }
 
-    @Override
-    public List<ChatLieu> getAllChatLieu() {
-        return chatLieuRepository.findAll();
-    }
-
-    @Override
-    public Page<ChatLieu> getAllChatLieuPage(Pageable pageable) {
-       return chatLieuRepository.getAllPage(pageable);
-    }
-
-    @Override
-    public Page<ChatLieu> searchChatLieu(String keyword, Integer trangThai, Pageable pageable) {
-        return chatLieuRepository.searchChatLieu(keyword, trangThai, pageable);
-    }
 
 }

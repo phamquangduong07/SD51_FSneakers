@@ -2,13 +2,14 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.KichThuocRequest;
+import com.sd51.fsneakers.features.product.dto.response.KichThuocResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sd51.fsneakers.features.product.entity.KichThuoc;
 import com.sd51.fsneakers.features.product.services.KichThuocService;
 
 import lombok.AccessLevel;
@@ -24,40 +25,41 @@ public class KichThuocController {
     KichThuocService kichThuocService;
 
     @GetMapping({ "", "/" })
-    public List<KichThuoc> getAllKichThuoc() {
-        return ResponseEntity.ok(kichThuocService.getAllKichThuoc()).getBody();
+    public ResponseEntity<List<KichThuocResponse>> getAllKichThuoc() {
+        return ResponseEntity.ok(kichThuocService.getAllKichThuoc());
     }
 
     @GetMapping("/page")
-    public Page<KichThuoc> getAllKichThuocPage(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<KichThuocResponse>> getAllKichThuocPage(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(kichThuocService.getAllKichThuocPage(pageable)).getBody();
+        return ResponseEntity.ok(kichThuocService.getAllKichThuocPage(pageable));
     }
 
     @GetMapping("/search")
-    public Page<KichThuoc> searchKichThuoc(@RequestParam(required = false) String keyword,
+    public ResponseEntity<Page<KichThuocResponse>> searchKichThuoc(@RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer trangThai,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return kichThuocService.searchKichThuoc(keyword, trangThai, pageable);
+        return ResponseEntity.ok(kichThuocService.searchKichThuoc(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public KichThuoc createKichThuoc(@RequestBody KichThuoc kichThuoc) {
-        return ResponseEntity.ok(kichThuocService.createKichThuoc(kichThuoc)).getBody();
+    public ResponseEntity<KichThuocResponse> createKichThuoc(@RequestBody KichThuocRequest kichThuoc) {
+        return ResponseEntity.ok(kichThuocService.createKichThuoc(kichThuoc));
     }
 
     @PutMapping("/update/{ma}")
-    public KichThuoc updateKichThuoc(@PathVariable String ma,
-            @RequestBody KichThuoc kichThuocUpdate) {
-        return ResponseEntity.ok(kichThuocService.updateKichThuoc(ma, kichThuocUpdate)).getBody();
+    public ResponseEntity<KichThuocResponse> updateKichThuoc(@PathVariable String ma,
+            @RequestBody KichThuocRequest kichThuocUpdate) {
+        return ResponseEntity.ok(kichThuocService.updateKichThuoc(ma, kichThuocUpdate));
     }
 
     @DeleteMapping("/delete/{ma}")
-    public KichThuoc deleteKichThuoc(@PathVariable String ma) {
-        return ResponseEntity.ok(kichThuocService.deleteKichThuoc(ma)).getBody();
+    public ResponseEntity<Void> deleteKichThuoc(@PathVariable String ma) {
+        kichThuocService.deleteKichThuoc(ma);
+        return ResponseEntity.ok().build();
     }
 
 }

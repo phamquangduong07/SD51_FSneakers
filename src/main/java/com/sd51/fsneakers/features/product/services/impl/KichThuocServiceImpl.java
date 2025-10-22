@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.mapper.KichThuocMapper;
+import com.sd51.fsneakers.features.product.dto.request.KichThuocRequest;
+import com.sd51.fsneakers.features.product.dto.response.KichThuocResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,18 @@ public class KichThuocServiceImpl implements KichThuocService {
     KichThuocRepository kichThuocRepository;
 
     @Override
-    public List<KichThuoc> getAllKichThuoc() {
-        return kichThuocRepository.findAll();
+    public List<KichThuocResponse> getAllKichThuoc() {
+        return kichThuocRepository.findAll().stream().map(KichThuocMapper::toResponse).toList();
+    }
+
+    @Override
+    public Page<KichThuocResponse> getAllKichThuocPage(Pageable pageable) {
+        return kichThuocRepository.getAllPage(pageable).map(KichThuocMapper::toResponse);
+    }
+
+    @Override
+    public Page<KichThuocResponse> searchKichThuoc(String keyword, Integer trangThai, Pageable pageable) {
+        return kichThuocRepository.searchKichThuoc(keyword, trangThai, pageable).map(KichThuocMapper::toResponse);
     }
 
     @Override
@@ -32,50 +45,42 @@ public class KichThuocServiceImpl implements KichThuocService {
     }
 
     @Override
-    public KichThuoc createKichThuoc(KichThuoc kichThuoc) {
-        if (kichThuocRepository.findByMa(kichThuoc.getMa()) != null) {
-            throw new RuntimeException("Mã kích thước '" + kichThuoc.getMa() + "' đã tồn tại.");
+    public KichThuocResponse createKichThuoc(KichThuocRequest request) {
+        if (kichThuocRepository.findByMa(request.getMa()) != null) {
+            throw new RuntimeException("Mã kích thước '" + request.getMa() + "' đã tồn tại.");
 
         }
-        return kichThuocRepository.save(kichThuoc);
+        KichThuoc kichThuoc = KichThuocMapper.toEntity(request);
+        kichThuocRepository.save(kichThuoc);
+        return KichThuocMapper.toResponse(kichThuoc);
     }
 
     @Override
-    public KichThuoc updateKichThuoc(String ma, KichThuoc kichThuocUpdate) {
+    public KichThuocResponse updateKichThuoc(String ma, KichThuocRequest request) {
         KichThuoc existing = findByMa(ma);
         if (existing == null) {
-            throw new IllegalArgumentException("Mã kích thước '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Mã kích thước '" + ma + "' không tồn tại.");
         }
-        if (!kichThuocUpdate.getMa().equals(ma)) {
-            if (findByMa(kichThuocUpdate.getMa()) != null) {
-                throw new IllegalArgumentException("Mã kích thước '" + kichThuocUpdate.getMa() + "' đã tồn tại!");
+        if (!request.getMa().equals(ma)) {
+            if (findByMa(request.getMa()) != null) {
+                throw new RuntimeException("Mã kích thước '" + request.getMa() + "' đã tồn tại!");
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ kichThuocUpdate
-        existing.setMa(kichThuocUpdate.getMa());
-        existing.setTen(kichThuocUpdate.getTen());
-        existing.setTrangThai(kichThuocUpdate.getTrangThai());
-        return kichThuocRepository.save(existing);
+        KichThuocMapper.toUpdate(existing, request);
+        KichThuoc update = kichThuocRepository.save(existing);
+        return KichThuocMapper.toResponse(update);
+
     }
 
     @Override
-    public KichThuoc deleteKichThuoc(String maKichThuoc) {
+    public void deleteKichThuoc(String maKichThuoc) {
         KichThuoc existing = findByMa(maKichThuoc);
         if (existing == null) {
-            throw new IllegalArgumentException("Mã kích thước '" + maKichThuoc + "' không tồn tại.");
+            throw new RuntimeException("Mã kích thước '" + maKichThuoc + "' không tồn tại.");
         }
         kichThuocRepository.delete(existing);
-        return existing;
     }
 
-    @Override
-    public Page<KichThuoc> getAllKichThuocPage(Pageable pageable) {
-        return kichThuocRepository.getAllPage(pageable);
-    }
-
-    @Override
-    public Page<KichThuoc> searchKichThuoc(String keyword, Integer trangThai, Pageable pageable) {
-        return kichThuocRepository.searchKichThuoc(keyword, trangThai, pageable);
-    }
 
 }

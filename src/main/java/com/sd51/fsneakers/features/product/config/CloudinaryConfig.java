@@ -15,7 +15,6 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Configuration
-@Component
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CloudinaryConfig {

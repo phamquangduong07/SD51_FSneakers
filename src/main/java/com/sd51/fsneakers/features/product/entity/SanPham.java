@@ -35,4 +35,7 @@ public class SanPham extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
+    public SanPham(UUID id) {
+        this.id =id;
+    }
 }

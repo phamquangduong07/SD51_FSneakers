@@ -9,11 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, UUID> {
+//        Optional<SanPhamChiTiet> findByMa(String ma);
         SanPhamChiTiet findByMa(String ma);
+        void deleteByMa(String ma);
+        boolean existsByMa(String ma);
 
         // Phân trang cơ bản (Spring Data tự sinh)
         @Query("SELECT dm FROM SanPhamChiTiet dm")

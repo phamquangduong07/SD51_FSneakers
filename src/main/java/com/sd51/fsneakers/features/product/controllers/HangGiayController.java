@@ -2,13 +2,14 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.HangGiayRequest;
+import com.sd51.fsneakers.features.product.dto.response.HangGiayResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sd51.fsneakers.features.product.entity.HangGiay;
 import com.sd51.fsneakers.features.product.services.HangGiayService;
 
 import lombok.AccessLevel;
@@ -24,39 +25,40 @@ public class HangGiayController {
     HangGiayService hangGiayService;
 
     @GetMapping({ "", "/" })
-    public List<HangGiay> getAllHangGiay() {
-        return ResponseEntity.ok(hangGiayService.getAllHangGiay()).getBody();
+    public ResponseEntity<List<HangGiayResponse>> getAllHangGiay() {
+        return ResponseEntity.ok(hangGiayService.getAllHangGiay());
     }
 
     @GetMapping("/page")
-    public Page<HangGiay> getAllHangGiayPage(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<HangGiayResponse>> getAllHangGiayPage(@RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(hangGiayService.getAllHangGiayPage(pageable)).getBody();
+        return ResponseEntity.ok(hangGiayService.getAllHangGiayPage(pageable));
     }
 
     @GetMapping("/search")
-    public Page<HangGiay> searchHangGiay(@RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Integer trangThai,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<HangGiayResponse>> searchHangGiay(@RequestParam(required = false) String keyword,
+                                                                 @RequestParam(required = false) Integer trangThai,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return hangGiayService.searchHangGiay(keyword, trangThai, pageable);
+        return ResponseEntity.ok(hangGiayService.searchHangGiay(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public HangGiay createHangGiay(@RequestBody HangGiay hangGiay) {
-        return ResponseEntity.ok(hangGiayService.createHangGiay(hangGiay)).getBody();
+    public ResponseEntity<HangGiayResponse> createHangGiay(@RequestBody HangGiayRequest hangGiay) {
+        return ResponseEntity.ok(hangGiayService.createHangGiay(hangGiay));
     }
 
     @PutMapping("/update/{ma}")
-    public HangGiay updateHangGiay(@PathVariable String ma, @RequestBody HangGiay hangGiayUpdate) {
-        return ResponseEntity.ok(hangGiayService.updateHangGiay(ma, hangGiayUpdate)).getBody();
+    public ResponseEntity<HangGiayResponse> updateHangGiay(@PathVariable String ma, @RequestBody HangGiayRequest hangGiayUpdate) {
+        return ResponseEntity.ok(hangGiayService.updateHangGiay(ma, hangGiayUpdate));
     }
 
     @DeleteMapping("/delete/{ma}")
-    public HangGiay deleteHangGiay(@PathVariable String ma) {
-        return ResponseEntity.ok(hangGiayService.deleteHangGiay(ma)).getBody();
+    public ResponseEntity<Void> deleteHangGiay(@PathVariable String ma) {
+        hangGiayService.deleteHangGiay(ma);
+        return ResponseEntity.ok().build();
     }
 
 }

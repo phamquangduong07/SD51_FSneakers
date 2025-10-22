@@ -1,0 +1,30 @@
+package com.sd51.fsneakers.features.product.dto.response;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class SanPhamResponse {
+
+    UUID id;
+
+    String ma;
+
+    String ten;
+
+    String moTa;
+
+    Integer trangThai;
+
+    LocalDateTime ngayTao;
+
+    LocalDateTime ngaySua;
+
+}

@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.mapper.SanPhamMapper;
+import com.sd51.fsneakers.features.product.dto.request.SanPhamRequest;
+import com.sd51.fsneakers.features.product.dto.response.SanPhamResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,18 @@ public class SanPhamServiceImpl implements SanPhamService {
     SanPhamRepository sanPhamRepository;
 
     @Override
-    public List<SanPham> getAllSanPham() {
-        return sanPhamRepository.findAll();
+    public List<SanPhamResponse> getAllSanPham() {
+        return sanPhamRepository.findAll().stream().map(SanPhamMapper::toResponse).toList();
+    }
+
+    @Override
+    public Page<SanPhamResponse> getAllSanPhamPage(Pageable pageable) {
+        return sanPhamRepository.getAllPage(pageable).map(SanPhamMapper::toResponse);
+    }
+
+    @Override
+    public Page<SanPhamResponse> searchSanPham(String keyword, Integer trangThai, Pageable pageable) {
+        return sanPhamRepository.searchSanPham(keyword, trangThai, pageable).map(SanPhamMapper::toResponse);
     }
 
     @Override
@@ -32,52 +45,41 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public SanPham createSanPham(SanPham sanPham) {
-        if (sanPhamRepository.findByMa(sanPham.getMa()) != null) {
-            throw new IllegalArgumentException("Mã sản phẩm '" + sanPham.getMa() + "' đã tồn tại");
+    public SanPhamResponse createSanPham(SanPhamRequest request) {
+        if (sanPhamRepository.findByMa(request.getMa()) != null) {
+            throw new RuntimeException("Mã sản phẩm '" + request.getMa() + "' đã tồn tại");
         }
-
-        return sanPhamRepository.save(sanPham);
+        SanPham sanPham = SanPhamMapper.toEntity(request);
+        sanPhamRepository.save(sanPham);
+        return SanPhamMapper.toResponse(sanPham);
     }
 
     @Override
-    public SanPham updateSanPham(String ma, SanPham updateSanPham) {
+    public SanPhamResponse updateSanPham(String ma, SanPhamRequest request) {
         SanPham existing = findByMa(ma);
         if (existing == null) {
-            throw new IllegalArgumentException("Mã sản phẩm '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Mã sản phẩm '" + ma + "' không tồn tại.");
         }
-        if (!updateSanPham.getMa().equals(ma)) {
-            if (findByMa(updateSanPham.getMa()) != null) {
-                throw new IllegalArgumentException("Mã sản phẩm '" + updateSanPham.getMa() + "' đã tồn tại!");
+        if (!request.getMa().equals(ma)) {
+            if (findByMa(request.getMa()) != null) {
+                throw new RuntimeException("Mã sản phẩm '" + request.getMa() + "' đã tồn tại!");
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ updateSanPham
-        existing.setMa(updateSanPham.getMa());
-        existing.setTen(updateSanPham.getTen());
-        existing.setMoTa(updateSanPham.getMoTa());
-        existing.setTrangThai(updateSanPham.getTrangThai());
-        return sanPhamRepository.save(existing);
+        SanPhamMapper.toUpdate(existing, request);
+        SanPham sanPham = sanPhamRepository.save(existing);
+        return SanPhamMapper.toResponse(sanPham);
     }
 
     @Override
-    public SanPham deleteSanPham(String maSanPham) {
+    public void deleteSanPham(String maSanPham) {
         SanPham existing = findByMa(maSanPham);
         if (existing == null) {
             throw new IllegalArgumentException("Mã sản phẩm '" + maSanPham + "' không tồn tại.");
         }
 
         sanPhamRepository.delete(existing);
-        return existing;
     }
 
-    @Override
-    public Page<SanPham> getAllSanPhamPage(Pageable pageable) {
-        return sanPhamRepository.getAllPage(pageable);
-    }
-
-    @Override
-    public Page<SanPham> searchSanPham(String keyword, Integer trangThai, Pageable pageable) {
-        return sanPhamRepository.searchSanPham(keyword, trangThai, pageable);
-    }
 
 }

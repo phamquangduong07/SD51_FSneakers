@@ -3,6 +3,8 @@ package com.sd51.fsneakers.features.product.controllers;
 import java.util.List;
 import java.util.UUID;
 
+import com.sd51.fsneakers.features.product.dto.request.HinhAnhSanPhamRequest;
+import com.sd51.fsneakers.features.product.dto.response.HinhAnhSanPhamResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,19 +28,19 @@ public class HinhAnhSanPhamController {
     HinhAnhSanPhamService hinhAnhSanPhamService;
 
     @GetMapping({ "", "/" })
-    public List<HinhAnhSanPham> getAllHinhAnhBySanPham() {
+    public List<HinhAnhSanPhamResponse> getAllHinhAnhBySanPham() {
         return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhBySanPham()).getBody();
     }
 
     @GetMapping("/page")
-    public Page<HinhAnhSanPham> getAllHinhAnhSanPhamPage(@RequestParam(defaultValue = "0") int page,
+    public Page<HinhAnhSanPhamResponse> getAllHinhAnhSanPhamPage(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhSanPhamPage(pageable)).getBody();
     }
 
     @GetMapping("/search")
-    public Page<HinhAnhSanPham> searchHinhAnhSanPham(@RequestParam(required = false) String keyword,
+    public Page<HinhAnhSanPhamResponse> searchHinhAnhSanPham(@RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer trangThai,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -47,19 +49,20 @@ public class HinhAnhSanPhamController {
     }
 
     @PostMapping("/add")
-    public HinhAnhSanPham createHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPham) {
+    public HinhAnhSanPhamResponse createHinhAnhSanPham(@RequestBody HinhAnhSanPhamRequest hinhAnhSanPham) {
         return ResponseEntity.ok(hinhAnhSanPhamService.createHinhAnhSanPham(hinhAnhSanPham)).getBody();
     }
 
     @PutMapping("/update/{ma}")
-    public HinhAnhSanPham updateHinhAnhSanPham(@RequestBody HinhAnhSanPham hinhAnhSanPhamUpdate,
+    public HinhAnhSanPhamResponse updateHinhAnhSanPham(@RequestBody HinhAnhSanPhamRequest hinhAnhSanPhamUpdate,
             @PathVariable String ma) {
         return ResponseEntity.ok(hinhAnhSanPhamService.updateHinhAnhSanPham(ma, hinhAnhSanPhamUpdate)).getBody();
     }
 
     @DeleteMapping("/delete/{ma}")
-    public HinhAnhSanPham deleteHinhAnhSanPham(@PathVariable String ma) {
-        return ResponseEntity.ok(hinhAnhSanPhamService.deleteHinhAnhSanPham(ma)).getBody();
+    public ResponseEntity<Void> deleteHinhAnhSanPham(@PathVariable String ma) {
+        hinhAnhSanPhamService.deleteHinhAnhSanPham(ma);
+        return ResponseEntity.ok().build();
     }
 
     // Upload image Cloudinary và upload(update) database
@@ -80,7 +83,7 @@ public class HinhAnhSanPhamController {
     }
 
     // Upload multiple images for a specific ChiTietSanPham ID
-    // Chỉ upload Cloudinary không upload database
+    // Upload Cloudinary và upload database
     @PostMapping(value = "/upload/{chiTietId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(
             @PathVariable UUID chiTietId,

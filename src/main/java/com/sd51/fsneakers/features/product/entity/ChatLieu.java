@@ -38,4 +38,8 @@ public class ChatLieu extends BaseEntity {
         this.ten = ten;
         this.trangThai = trangThai;
     }
+
+    public ChatLieu(UUID id) {
+        this.id =id;
+    }
 }

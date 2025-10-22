@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.DeGiayRequest;
+import com.sd51.fsneakers.features.product.dto.response.DeGiayResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,17 +11,19 @@ import com.sd51.fsneakers.features.product.entity.DeGiay;
 
 public interface DeGiayService {
 
-    List<DeGiay> getAllDeGiay();
+    List<DeGiayResponse> getAllDeGiay();
+
+    Page<DeGiayResponse> getAllDeGiayPage(Pageable pageable);
+
+    Page<DeGiayResponse> searchDeGiay(String keyword, Integer trangThai, Pageable pageable);
 
     DeGiay findByMa(String maDeGiay);
 
-    DeGiay createDeGiay(DeGiay deGiay);
+    DeGiayResponse createDeGiay(DeGiayRequest request);
 
-    DeGiay updateDeGiay(String ma, DeGiay deGiayUpdate);
+    DeGiayResponse updateDeGiay(String ma, DeGiayRequest request);
 
-    DeGiay deleteDeGiay(String maDeGiay);
+    void deleteDeGiay(String maDeGiay);
 
-    Page<DeGiay> getAllDeGiayPage(Pageable pageable);
 
-    Page<DeGiay> searchDeGiay(String keyword, Integer trangThai, Pageable pageable);
 }

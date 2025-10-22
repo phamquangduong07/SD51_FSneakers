@@ -2,6 +2,9 @@ package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.mapper.DanhMucMapper;
+import com.sd51.fsneakers.features.product.dto.request.DanhMucRequest;
+import com.sd51.fsneakers.features.product.dto.response.DanhMucResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,13 +25,20 @@ public class DanhMucServiceImpl implements DanhMucService {
     DanhMucRepository danhMucRepository;
 
     @Override
-    public DanhMuc createDanhMuc(DanhMuc danhMuc) {
-        if (findByMa(danhMuc.getMa()) != null) {
-            throw new RuntimeException("Mã danh mục '" + danhMuc.getMa() + "' đã tồn tại!");
-        }
-
-        return danhMucRepository.save(danhMuc);
+    public List<DanhMucResponse> getAllDanhMuc() {
+        return danhMucRepository.findAll().stream().map(DanhMucMapper::toResponse).toList();
     }
+
+    @Override
+    public Page<DanhMucResponse> getAllDanhMucPage(Pageable pageable) {
+        return danhMucRepository.getAllPage(pageable).map(DanhMucMapper::toResponse);
+    }
+
+    @Override
+    public Page<DanhMucResponse> searchDanhMuc(String keyword, Integer trangThai, Pageable pageable) {
+        return danhMucRepository.searchDanhMuc(keyword, trangThai, pageable).map(DanhMucMapper::toResponse);
+    }
+
 
     @Override
     public DanhMuc findByMa(String ma) {
@@ -36,48 +46,43 @@ public class DanhMucServiceImpl implements DanhMucService {
     }
 
     @Override
-    public DanhMuc updateDanhMucByMa(String ma, DanhMuc danhMucUpdate) {
+    public DanhMucResponse createDanhMuc(DanhMucRequest request) {
+        if (findByMa(request.getMa()) != null) {
+            throw new RuntimeException("Mã danh mục '" + request.getMa() + "' đã tồn tại!");
+        }
+        DanhMuc danhMuc = DanhMucMapper.toEntity(request);
+        danhMucRepository.save(danhMuc);
+        return DanhMucMapper.toResponse(danhMuc);
+    }
+
+    @Override
+    public DanhMucResponse updateDanhMucByMa(String ma, DanhMucRequest request) {
         DanhMuc existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã danh mục '" + ma + "' không tồn tại!");
         }
-        if (!danhMucUpdate.getMa().equals(ma)) {
-            if (findByMa(danhMucUpdate.getMa()) != null) {
-                throw new RuntimeException("Mã danh mục '" + danhMucUpdate.getMa() + "' đã tồn tại!");
+        if (!request.getMa().equals(ma)) {
+            if (findByMa(request.getMa()) != null) {
+                throw new RuntimeException("Mã danh mục '" + request.getMa() + "' đã tồn tại!");
             } else {
 
             }
         }
-        // Cập nhật các thuộc tính của existing với giá trị từ danhMucUpdate
-        existing.setMa(danhMucUpdate.getMa());
-        existing.setTen(danhMucUpdate.getTen());
-        existing.setTrangThai(danhMucUpdate.getTrangThai());
-        return danhMucRepository.save(existing);
+        // Cập nhật các field (tự động với MapStruct)
+        DanhMucMapper.toUpdate(existing, request);
+
+        DanhMuc update = danhMucRepository.save(existing);
+
+        return DanhMucMapper.toResponse(update);
     }
 
-    @Override
-    public List<DanhMuc> getAllDanhMuc() {
-        return danhMucRepository.findAll();
-    }
 
     @Override
-    public DanhMuc deleteDanhMuc(String ma) {
+    public void deleteDanhMuc(String ma) {
         DanhMuc existing = findByMa(ma);
         if (existing == null) {
             throw new RuntimeException("Mã danh mục '" + ma + "' không tồn tại!");
         }
         danhMucRepository.delete(existing);
-        return existing;
     }
-
-    @Override
-    public Page<DanhMuc> getAllDanhMucPage(Pageable pageable) {
-        return danhMucRepository.getAllPage(pageable);
-    }
-
-    @Override
-    public Page<DanhMuc> searchDanhMuc(String keyword, Integer trangThai, Pageable pageable) {
-        return danhMucRepository.searchDanhMuc(keyword, trangThai, pageable);
-    }
-
 }

@@ -32,4 +32,7 @@ public class KichThuoc extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
+    public KichThuoc(UUID id) {
+        this.id =id;
+    }
 }

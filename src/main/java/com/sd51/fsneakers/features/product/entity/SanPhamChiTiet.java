@@ -91,4 +91,8 @@ public class SanPhamChiTiet extends BaseEntity {
     @OneToMany(mappedBy = "chiTietSanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference // Cho phép Jackson serialize ra JSON (bên cha)
     List<HinhAnhSanPham> hinhAnhSanPhams;
+
+    public  SanPhamChiTiet(UUID id) {
+        this.id = id;
+    }
 }

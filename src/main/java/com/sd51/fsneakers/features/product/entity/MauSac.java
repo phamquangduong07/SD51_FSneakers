@@ -32,4 +32,7 @@ public class MauSac extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
+    public MauSac(UUID id) {
+        this.id =id;
+    }
 }

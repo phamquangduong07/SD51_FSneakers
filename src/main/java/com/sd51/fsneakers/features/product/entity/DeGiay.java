@@ -32,5 +32,7 @@ public class DeGiay extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
-
+    public DeGiay(UUID id) {
+        this.id =id;
+    }
 }

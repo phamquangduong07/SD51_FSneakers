@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.controllers;
 
-import com.sd51.fsneakers.features.product.entity.ChatLieu;
+import com.sd51.fsneakers.features.product.dto.request.ChatLieuRequest;
+import com.sd51.fsneakers.features.product.dto.response.ChatLieuResponse;
 import com.sd51.fsneakers.features.product.services.ChatLieuService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,43 +22,43 @@ public class ChatLieuController {
     ChatLieuService chatLieuService;
 
     @GetMapping({ "", "/" })
-    public List<ChatLieu> getAllChatLieu() {
-        return ResponseEntity.ok(chatLieuService.getAllChatLieu()).getBody();
+    public ResponseEntity<List<ChatLieuResponse>> getAllChatLieu() {
+        return ResponseEntity.ok(chatLieuService.getAllChatLieu());
     }
 
     @GetMapping("/page")
-    public Page<ChatLieu> getAllChatLieuPage(
+    public ResponseEntity<Page<ChatLieuResponse>> getAllChatLieuPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(chatLieuService.getAllChatLieuPage(pageable)).getBody();
+        return ResponseEntity.ok(chatLieuService.getAllChatLieuPage(pageable));
     }
 
     @GetMapping("/search")
-    public Page<ChatLieu> searchChatLieu(
+    public ResponseEntity<Page<ChatLieuResponse>> searchChatLieu(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer trangThai,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity
-                .ok(chatLieuService.searchChatLieu(keyword, trangThai, pageable))
-                .getBody();
+        return ResponseEntity.ok(chatLieuService.searchChatLieu(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public ChatLieu createChatLieu(@RequestBody ChatLieu chatLieu) {
-        return ResponseEntity.ok(chatLieuService.createChatLieu(chatLieu)).getBody();
+    public ResponseEntity<ChatLieuResponse> createChatLieu(@RequestBody ChatLieuRequest request) {
+        return ResponseEntity.ok(chatLieuService.createChatLieu(request));
     }
 
     @PutMapping("/update/{ma}")
-    public ChatLieu updateChatLieu(@PathVariable("ma") String ma,
-            @RequestBody ChatLieu chatLieu) {
-        return ResponseEntity.ok(chatLieuService.updateChatLieuByMa(ma, chatLieu)).getBody();
+    public ResponseEntity<ChatLieuResponse> updateChatLieu(@PathVariable("ma") String ma,
+            @RequestBody ChatLieuRequest request) {
+        ChatLieuResponse update = chatLieuService.updateChatLieuByMa(ma, request);
+        return ResponseEntity.ok(update);
     }
 
     @DeleteMapping("/delete/{ma}")
-    public ChatLieu deleteChatLieu(@PathVariable("ma") String ma) {
-        return ResponseEntity.ok(chatLieuService.deleteChatLieuByMa(ma)).getBody();
+    public ResponseEntity<ChatLieuResponse> deleteChatLieu(@PathVariable("ma") String ma) {
+
+        return ResponseEntity.ok(chatLieuService.deleteChatLieuByMa(ma));
     }
 }

@@ -2,26 +2,28 @@ package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
+import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.sd51.fsneakers.features.product.entity.DanhMuc;
 import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 
 public interface SanPhamChiTietService {
 
-    List<SanPhamChiTiet> getAllSanPhamChiTiet();
+    List<SanPhamChiTietResponse> getAllSanPhamChiTiet();
+
+    Page<SanPhamChiTietResponse> getAllSanPhamChiTietPage(Pageable pageable);
+
+    Page<SanPhamChiTietResponse> searchSanPhamChiTiet(String keyword, Integer trangThai, Pageable pageable);
 
     SanPhamChiTiet findByMa(String maSanPhamChiTiet);
 
-    SanPhamChiTiet createSanPhamChiTiet(SanPhamChiTiet sanPhamChiTiet);
+    SanPhamChiTietResponse createSanPhamChiTiet(SanPhamChiTietRequest request);
 
-    SanPhamChiTiet updateSanPhamChiTiet(String ma, SanPhamChiTiet sanPhamChiTietUpdate);
+    SanPhamChiTietResponse updateSanPhamChiTiet(String ma, SanPhamChiTietRequest request);
 
-    SanPhamChiTiet deleteSanPhamChiTiet(String maSanPhamChiTiet);
+    void deleteSanPhamChiTiet(String maSanPhamChiTiet);
 
-    Page<SanPhamChiTiet> getAllSanPhamChiTietPage(Pageable pageable);
-
-    Page<SanPhamChiTiet> searchSanPhamChiTiet(String keyword, Integer trangThai, Pageable pageable);
 
 }

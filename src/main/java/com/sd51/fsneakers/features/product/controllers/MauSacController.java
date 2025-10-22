@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.MauSacRequest;
+import com.sd51.fsneakers.features.product.dto.response.MauSacResponse;
 import com.sd51.fsneakers.features.product.entity.MauSac;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,39 +26,40 @@ public class MauSacController {
     MauSacService mauSacService;
 
     @GetMapping({ "", "/" })
-    public List<MauSac> getAllMauSac() {
-        return ResponseEntity.ok(mauSacService.getAllMauSac()).getBody();
+    public ResponseEntity<List<MauSacResponse>> getAllMauSac() {
+        return ResponseEntity.ok(mauSacService.getAllMauSac());
     }
 
     @GetMapping("/page")
-    public Page<MauSac> getAllMauSacPage(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<MauSacResponse>> getAllMauSacPage(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(mauSacService.getAllMauSacPage(pageable)).getBody();
+        return ResponseEntity.ok(mauSacService.getAllMauSacPage(pageable));
     }
 
     @GetMapping("/search")
-    public Page<MauSac> searchMauSac(@RequestParam(required = false) String keyword,
+    public ResponseEntity<Page<MauSacResponse>> searchMauSac(@RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer trangThai,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return mauSacService.searchMauSac(keyword, trangThai, pageable);
+        return ResponseEntity.ok(mauSacService.searchMauSac(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public MauSac createMauSac(@RequestBody MauSac mauSac) {
-        return ResponseEntity.ok(mauSacService.createMauSac(mauSac)).getBody();
+    public ResponseEntity<MauSacResponse> createMauSac(@RequestBody MauSacRequest mauSac) {
+        return ResponseEntity.ok(mauSacService.createMauSac(mauSac));
     }
 
     @PutMapping("/update/{ma}")
-    public MauSac updateMauSac(@RequestBody MauSac mauSacUpdate, @PathVariable String ma) {
-        return ResponseEntity.ok(mauSacService.updateMauSac(ma, mauSacUpdate)).getBody();
+    public ResponseEntity<MauSacResponse> updateMauSac(@PathVariable String ma, @RequestBody MauSacRequest mauSac) {
+        return ResponseEntity.ok(mauSacService.updateMauSac(ma, mauSac));
     }
 
     @DeleteMapping("/delete/{ma}")
-    public MauSac deleteMauSac(@PathVariable String ma) {
-        return ResponseEntity.ok(mauSacService.deleteMauSac(ma)).getBody();
+    public ResponseEntity<Void> deleteMauSac(@PathVariable String ma) {
+        mauSacService.deleteMauSac(ma);
+        return ResponseEntity.ok().build();
     }
 
 }

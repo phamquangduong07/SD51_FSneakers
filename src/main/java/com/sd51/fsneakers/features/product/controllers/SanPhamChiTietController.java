@@ -2,6 +2,8 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
 
+import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
+import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,40 +26,42 @@ public class SanPhamChiTietController {
     SanPhamChiTietService sanPhamChiTietService;
 
     @GetMapping({ "", "/" })
-    public List<SanPhamChiTiet> getAllSanPhamChiTiet() {
-        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTiet()).getBody();
+    public ResponseEntity<List<SanPhamChiTietResponse>> getAllSanPhamChiTiet() {
+        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTiet());
     }
 
     @GetMapping("/page")
-    public Page<SanPhamChiTiet> getAllSanPhamChiTietPage(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<SanPhamChiTietResponse>> getAllSanPhamChiTietPage(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTietPage(pageable)).getBody();
+        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTietPage(pageable));
     }
 
     @GetMapping("/search")
-    public Page<SanPhamChiTiet> searchSanPhamChiTiet(@RequestParam(required = false) String keyword,
+    public ResponseEntity<Page<SanPhamChiTietResponse>> searchSanPhamChiTiet(@RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer trangThai,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable);
+        return ResponseEntity.ok(sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public SanPhamChiTiet createSanPhamChiTiet(@RequestBody SanPhamChiTiet sanPhamChiTiet) {
-        return ResponseEntity.ok(sanPhamChiTietService.createSanPhamChiTiet(sanPhamChiTiet)).getBody();
+    public ResponseEntity<SanPhamChiTietResponse> createSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTiet) {
+        return ResponseEntity.ok(sanPhamChiTietService.createSanPhamChiTiet(sanPhamChiTiet));
     }
 
     @PutMapping("/update/{ma}")
-    public SanPhamChiTiet updateSanPhamChiTiet(@RequestBody SanPhamChiTiet sanPhamChiTietUpdate,
+    public ResponseEntity<SanPhamChiTietResponse> updateSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTietUpdate,
             @PathVariable String ma) {
-        return ResponseEntity.ok(sanPhamChiTietService.updateSanPhamChiTiet(ma, sanPhamChiTietUpdate)).getBody();
+        return ResponseEntity.ok(sanPhamChiTietService.updateSanPhamChiTiet(ma, sanPhamChiTietUpdate));
     }
 
     @DeleteMapping("/delete/{ma}")
-    public SanPhamChiTiet deleteSanPhamChiTiet(@PathVariable String ma) {
-        return ResponseEntity.ok(sanPhamChiTietService.deleteSanPhamChiTiet(ma)).getBody();
+    public ResponseEntity<Void> deleteSanPhamChiTiet(@PathVariable String ma) {
+        sanPhamChiTietService.deleteSanPhamChiTiet(ma);
+        return ResponseEntity.ok().build();
     }
+
 
 }
