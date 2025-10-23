@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 
@@ -51,15 +52,14 @@ public class DeGiayController {
         return ResponseEntity.ok(deGiayService.createDeGiay(deGiay));
     }
 
-    @PutMapping("/update/{ma}")
-    public ResponseEntity<DeGiayResponse> updateDeGiay(@PathVariable("ma") String ma, @RequestBody DeGiayRequest deGiay) {
-        return ResponseEntity.ok(deGiayService.updateDeGiay(ma, deGiay));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<DeGiayResponse> updateDeGiay(@PathVariable("id") UUID id, @RequestBody DeGiayRequest deGiay) {
+        return ResponseEntity.ok(deGiayService.updateDeGiay(id, deGiay));
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteDeGiay(@PathVariable("ma") String ma) {
-        deGiayService.deleteDeGiay(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<DeGiayResponse> deleteDeGiay(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(deGiayService.deleteDeGiay(id));
     }
 
 }

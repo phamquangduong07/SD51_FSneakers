@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.DanhMucMapper;
 import com.sd51.fsneakers.features.product.dto.request.DanhMucRequest;
@@ -23,20 +24,21 @@ import lombok.experimental.FieldDefaults;
 public class DanhMucServiceImpl implements DanhMucService {
 
     DanhMucRepository danhMucRepository;
+    DanhMucMapper danhMucMapper;
 
     @Override
     public List<DanhMucResponse> getAllDanhMuc() {
-        return danhMucRepository.findAll().stream().map(DanhMucMapper::toResponse).toList();
+        return danhMucRepository.findAll().stream().map(danhMucMapper::toResponse).toList();
     }
 
     @Override
     public Page<DanhMucResponse> getAllDanhMucPage(Pageable pageable) {
-        return danhMucRepository.getAllPage(pageable).map(DanhMucMapper::toResponse);
+        return danhMucRepository.getAllPage(pageable).map(danhMucMapper::toResponse);
     }
 
     @Override
     public Page<DanhMucResponse> searchDanhMuc(String keyword, Integer trangThai, Pageable pageable) {
-        return danhMucRepository.searchDanhMuc(keyword, trangThai, pageable).map(DanhMucMapper::toResponse);
+        return danhMucRepository.searchDanhMuc(keyword, trangThai, pageable).map(danhMucMapper::toResponse);
     }
 
 
@@ -46,20 +48,25 @@ public class DanhMucServiceImpl implements DanhMucService {
     }
 
     @Override
+    public DanhMuc findById(UUID id) {
+        return danhMucRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
     public DanhMucResponse createDanhMuc(DanhMucRequest request) {
         if (findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã danh mục '" + request.getMa() + "' đã tồn tại!");
         }
-        DanhMuc danhMuc = DanhMucMapper.toEntity(request);
+        DanhMuc danhMuc = danhMucMapper.toEntity(request);
         danhMucRepository.save(danhMuc);
-        return DanhMucMapper.toResponse(danhMuc);
+        return danhMucMapper.toResponse(danhMuc);
     }
 
     @Override
-    public DanhMucResponse updateDanhMucByMa(String ma, DanhMucRequest request) {
-        DanhMuc existing = findByMa(ma);
+    public DanhMucResponse updateDanhMucByMa(UUID ma, DanhMucRequest request) {
+        DanhMuc existing = findById(ma);
         if (existing == null) {
-            throw new RuntimeException("Mã danh mục '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Id danh mục '" + ma + "' không tồn tại!");
         }
         if (!request.getMa().equals(ma)) {
             if (findByMa(request.getMa()) != null) {
@@ -69,20 +76,22 @@ public class DanhMucServiceImpl implements DanhMucService {
             }
         }
         // Cập nhật các field (tự động với MapStruct)
-        DanhMucMapper.toUpdate(existing, request);
+        danhMucMapper.toUpdate(existing, request);
 
         DanhMuc update = danhMucRepository.save(existing);
 
-        return DanhMucMapper.toResponse(update);
+        return danhMucMapper.toResponse(update);
     }
 
 
     @Override
-    public void deleteDanhMuc(String ma) {
-        DanhMuc existing = findByMa(ma);
+    public DanhMucResponse deleteDanhMuc(UUID id) {
+        DanhMuc existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã danh mục '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Id danh mục '" + id + "' không tồn tại!");
         }
+        DanhMucResponse delete = danhMucMapper.toResponse(existing);
         danhMucRepository.delete(existing);
+        return delete;
     }
 }

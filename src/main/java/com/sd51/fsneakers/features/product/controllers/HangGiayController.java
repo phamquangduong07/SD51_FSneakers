@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.HangGiayRequest;
 import com.sd51.fsneakers.features.product.dto.response.HangGiayResponse;
@@ -24,7 +25,7 @@ public class HangGiayController {
 
     HangGiayService hangGiayService;
 
-    @GetMapping({ "", "/" })
+    @GetMapping({"", "/"})
     public ResponseEntity<List<HangGiayResponse>> getAllHangGiay() {
         return ResponseEntity.ok(hangGiayService.getAllHangGiay());
     }
@@ -50,15 +51,14 @@ public class HangGiayController {
         return ResponseEntity.ok(hangGiayService.createHangGiay(hangGiay));
     }
 
-    @PutMapping("/update/{ma}")
-    public ResponseEntity<HangGiayResponse> updateHangGiay(@PathVariable String ma, @RequestBody HangGiayRequest hangGiayUpdate) {
-        return ResponseEntity.ok(hangGiayService.updateHangGiay(ma, hangGiayUpdate));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<HangGiayResponse> updateHangGiay(@PathVariable UUID id, @RequestBody HangGiayRequest hangGiayUpdate) {
+        return ResponseEntity.ok(hangGiayService.updateHangGiay(id, hangGiayUpdate));
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteHangGiay(@PathVariable String ma) {
-        hangGiayService.deleteHangGiay(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HangGiayResponse> deleteHangGiay(@PathVariable UUID id) {
+        return ResponseEntity.ok(hangGiayService.deleteHangGiay(id));
     }
 
 }

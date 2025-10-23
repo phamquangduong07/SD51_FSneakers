@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,26 +25,33 @@ public class ChatLieuServiceImpl implements ChatLieuService {
 
     ChatLieuRepository chatLieuRepository;
 
+    ChatLieuMapper chatLieuMapper;
+
     @Override
     public List<ChatLieuResponse> getAllChatLieu() {
         return chatLieuRepository.findAll().stream()
-                .map(ChatLieuMapper::toResponse)
+                .map(chatLieuMapper::toResponse)
                 .toList();
     }
 
     @Override
     public Page<ChatLieuResponse> getAllChatLieuPage(Pageable pageable) {
-        return chatLieuRepository.getAllPage(pageable).map(ChatLieuMapper::toResponse);
+        return chatLieuRepository.getAllPage(pageable).map(chatLieuMapper::toResponse);
     }
 
     @Override
     public Page<ChatLieuResponse> searchChatLieu(String keyword, Integer trangThai, Pageable pageable) {
-        return chatLieuRepository.searchChatLieu(keyword, trangThai, pageable).map(ChatLieuMapper::toResponse);
+        return chatLieuRepository.searchChatLieu(keyword, trangThai, pageable).map(chatLieuMapper::toResponse);
     }
 
     @Override
     public ChatLieu findByMa(String ma) {
         return chatLieuRepository.findByMa(ma);
+    }
+
+    @Override
+    public ChatLieu findById(UUID id) {
+        return chatLieuRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
     }
 
 
@@ -53,15 +61,15 @@ public class ChatLieuServiceImpl implements ChatLieuService {
             throw new RuntimeException("Mã chất liệu '" + request.getMa() + "' đã tồn tại!");
         }
 
-        ChatLieu chatLieu = ChatLieuMapper.toEntity(request);
+        ChatLieu chatLieu = chatLieuMapper.toEntity(request);
         chatLieuRepository.save(chatLieu);
-        return ChatLieuMapper.toResponse(chatLieu);
+        return chatLieuMapper.toResponse(chatLieu);
     }
 
 
     @Override
-    public ChatLieuResponse updateChatLieuByMa(String ma, ChatLieuRequest chatLieuUpdate) {
-        ChatLieu existing = findByMa(ma);
+    public ChatLieuResponse updateChatLieuByMa(UUID ma, ChatLieuRequest chatLieuUpdate) {
+        ChatLieu existing = findById(ma);
         if (existing == null) {
             throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
         }
@@ -73,18 +81,18 @@ public class ChatLieuServiceImpl implements ChatLieuService {
             }
         }
         // Cập nhật các field (tự động với MapStruct)
-        ChatLieuMapper.toUpdate(existing, chatLieuUpdate);
+        chatLieuMapper.toUpdate(existing, chatLieuUpdate);
         ChatLieu update = chatLieuRepository.save(existing);
-        return ChatLieuMapper.toResponse(update);
+        return chatLieuMapper.toResponse(update);
     }
 
     @Override
-    public ChatLieuResponse deleteChatLieuByMa(String ma) {
-        ChatLieu existing = findByMa(ma);
+    public ChatLieuResponse deleteChatLieuByMa(UUID ma) {
+        ChatLieu existing = findById(ma);
         if (existing == null) {
             throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
         }
-        ChatLieuResponse deleteResponse = ChatLieuMapper.toResponse(existing);
+        ChatLieuResponse deleteResponse = chatLieuMapper.toResponse(existing);
         chatLieuRepository.delete(existing);
         return deleteResponse;
     }

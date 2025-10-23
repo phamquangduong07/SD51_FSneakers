@@ -32,7 +32,4 @@ public class HangGiay extends BaseEntity {
     @Column(name = "trang_thai", nullable = false)
     Integer trangThai;
 
-    public HangGiay(UUID id) {
-        this.id =id;
-    }
 }

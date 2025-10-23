@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.SanPhamMapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamRequest;
@@ -23,20 +24,21 @@ import lombok.experimental.FieldDefaults;
 public class SanPhamServiceImpl implements SanPhamService {
 
     SanPhamRepository sanPhamRepository;
+    SanPhamMapper sanPhamMapper;
 
     @Override
     public List<SanPhamResponse> getAllSanPham() {
-        return sanPhamRepository.findAll().stream().map(SanPhamMapper::toResponse).toList();
+        return sanPhamRepository.findAll().stream().map(sanPhamMapper::toResponse).toList();
     }
 
     @Override
     public Page<SanPhamResponse> getAllSanPhamPage(Pageable pageable) {
-        return sanPhamRepository.getAllPage(pageable).map(SanPhamMapper::toResponse);
+        return sanPhamRepository.getAllPage(pageable).map(sanPhamMapper::toResponse);
     }
 
     @Override
     public Page<SanPhamResponse> searchSanPham(String keyword, Integer trangThai, Pageable pageable) {
-        return sanPhamRepository.searchSanPham(keyword, trangThai, pageable).map(SanPhamMapper::toResponse);
+        return sanPhamRepository.searchSanPham(keyword, trangThai, pageable).map(sanPhamMapper::toResponse);
     }
 
     @Override
@@ -45,40 +47,46 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public SanPham findById(UUID id) {
+        return sanPhamRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
     public SanPhamResponse createSanPham(SanPhamRequest request) {
         if (sanPhamRepository.findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã sản phẩm '" + request.getMa() + "' đã tồn tại");
         }
-        SanPham sanPham = SanPhamMapper.toEntity(request);
+        SanPham sanPham = sanPhamMapper.toEntity(request);
         sanPhamRepository.save(sanPham);
-        return SanPhamMapper.toResponse(sanPham);
+        return sanPhamMapper.toResponse(sanPham);
     }
 
     @Override
-    public SanPhamResponse updateSanPham(String ma, SanPhamRequest request) {
-        SanPham existing = findByMa(ma);
+    public SanPhamResponse updateSanPham(UUID id, SanPhamRequest request) {
+        SanPham existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã sản phẩm '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Id sản phẩm '" + id + "' không tồn tại.");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã sản phẩm '" + request.getMa() + "' đã tồn tại!");
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ updateSanPham
-        SanPhamMapper.toUpdate(existing, request);
+        sanPhamMapper.toUpdate(existing, request);
         SanPham sanPham = sanPhamRepository.save(existing);
-        return SanPhamMapper.toResponse(sanPham);
+        return sanPhamMapper.toResponse(sanPham);
     }
 
     @Override
-    public void deleteSanPham(String maSanPham) {
-        SanPham existing = findByMa(maSanPham);
+    public SanPhamResponse deleteSanPham(UUID id) {
+        SanPham existing = findById(id);
         if (existing == null) {
-            throw new IllegalArgumentException("Mã sản phẩm '" + maSanPham + "' không tồn tại.");
+            throw new IllegalArgumentException("Id sản phẩm '" + id + "' không tồn tại.");
         }
-
+        SanPhamResponse sanPhamResponse = sanPhamMapper.toResponse(existing);
         sanPhamRepository.delete(existing);
+        return sanPhamResponse;
     }
 
 

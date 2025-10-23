@@ -27,42 +27,42 @@ public class HinhAnhSanPhamController {
 
     HinhAnhSanPhamService hinhAnhSanPhamService;
 
-    @GetMapping({ "", "/" })
-    public List<HinhAnhSanPhamResponse> getAllHinhAnhBySanPham() {
-        return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhBySanPham()).getBody();
+    @GetMapping({"", "/"})
+    public ResponseEntity<List<HinhAnhSanPhamResponse>> getAllHinhAnhBySanPham() {
+        return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhBySanPham());
     }
 
     @GetMapping("/page")
-    public Page<HinhAnhSanPhamResponse> getAllHinhAnhSanPhamPage(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<HinhAnhSanPhamResponse>> getAllHinhAnhSanPhamPage(@RequestParam(defaultValue = "0") int page,
+                                                                                 @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhSanPhamPage(pageable)).getBody();
+        return ResponseEntity.ok(hinhAnhSanPhamService.getAllHinhAnhSanPhamPage(pageable));
     }
 
     @GetMapping("/search")
-    public Page<HinhAnhSanPhamResponse> searchHinhAnhSanPham(@RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Integer trangThai,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<HinhAnhSanPhamResponse>> searchHinhAnhSanPham(@RequestParam(required = false) String keyword,
+                                                                             @RequestParam(required = false) Integer trangThai,
+                                                                             @RequestParam(defaultValue = "0") int page,
+                                                                             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return hinhAnhSanPhamService.searchHinhAnhSanPham(keyword, trangThai, pageable);
+        return ResponseEntity.ok(hinhAnhSanPhamService.searchHinhAnhSanPham(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public HinhAnhSanPhamResponse createHinhAnhSanPham(@RequestBody HinhAnhSanPhamRequest hinhAnhSanPham) {
-        return ResponseEntity.ok(hinhAnhSanPhamService.createHinhAnhSanPham(hinhAnhSanPham)).getBody();
+    public ResponseEntity<HinhAnhSanPhamResponse> createHinhAnhSanPham(@RequestBody HinhAnhSanPhamRequest hinhAnhSanPham) {
+        return ResponseEntity.ok(hinhAnhSanPhamService.createHinhAnhSanPham(hinhAnhSanPham));
     }
 
-    @PutMapping("/update/{ma}")
-    public HinhAnhSanPhamResponse updateHinhAnhSanPham(@RequestBody HinhAnhSanPhamRequest hinhAnhSanPhamUpdate,
-            @PathVariable String ma) {
-        return ResponseEntity.ok(hinhAnhSanPhamService.updateHinhAnhSanPham(ma, hinhAnhSanPhamUpdate)).getBody();
+    @PutMapping("/update/{id}")
+    public ResponseEntity<HinhAnhSanPhamResponse> updateHinhAnhSanPham(@RequestBody HinhAnhSanPhamRequest hinhAnhSanPhamUpdate,
+                                                                       @PathVariable UUID id) {
+        return ResponseEntity.ok(hinhAnhSanPhamService.updateHinhAnhSanPham(id, hinhAnhSanPhamUpdate));
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteHinhAnhSanPham(@PathVariable String ma) {
-        hinhAnhSanPhamService.deleteHinhAnhSanPham(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HinhAnhSanPhamResponse> deleteHinhAnhSanPham(@PathVariable UUID id) {
+
+        return ResponseEntity.ok(hinhAnhSanPhamService.deleteHinhAnhSanPham(id));
     }
 
     // Upload image Cloudinary và upload(update) database

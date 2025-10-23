@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.MauSacMapper;
 import com.sd51.fsneakers.features.product.dto.request.MauSacRequest;
@@ -24,19 +25,21 @@ public class MauSacServiceImpl implements MauSacService {
 
     MauSacRepository mauSacRepository;
 
+    MauSacMapper mauSacMapper;
+
     @Override
     public List<MauSacResponse> getAllMauSac() {
-        return mauSacRepository.findAll().stream().map(MauSacMapper::toResponse).toList();
+        return mauSacRepository.findAll().stream().map(mauSacMapper::toResponse).toList();
     }
 
     @Override
     public Page<MauSacResponse> getAllMauSacPage(Pageable pageable) {
-        return mauSacRepository.getAllPage(pageable).map(MauSacMapper::toResponse);
+        return mauSacRepository.getAllPage(pageable).map(mauSacMapper::toResponse);
     }
 
     @Override
     public Page<MauSacResponse> searchMauSac(String keyword, Integer trangThai, Pageable pageable) {
-        return mauSacRepository.searchMauSac(keyword, trangThai, pageable).map(MauSacMapper::toResponse);
+        return mauSacRepository.searchMauSac(keyword, trangThai, pageable).map(mauSacMapper::toResponse);
     }
 
     @Override
@@ -45,41 +48,46 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
+    public MauSac findById(UUID id) {
+        return mauSacRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+
+    @Override
     public MauSacResponse createMauSac(MauSacRequest request) {
         if (mauSacRepository.findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã màu sắc '" + request.getMa() + "' đã tồn tại.");
         }
-        MauSac mauSac = MauSacMapper.toEntity(request);
+        MauSac mauSac = mauSacMapper.toEntity(request);
         mauSacRepository.save(mauSac);
-        return MauSacMapper.toResponse(mauSac);
+        return mauSacMapper.toResponse(mauSac);
     }
 
     @Override
-    public MauSacResponse updateMauSac(String ma, MauSacRequest request) {
-        MauSac existing = findByMa(ma);
+    public MauSacResponse updateMauSac(UUID id, MauSacRequest request) {
+        MauSac existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã màu sắc '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Id màu sắc '" + id + "' không tồn tại.");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã màu sắc '" + request.getMa() + "' đã tồn tại!");
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ mauSacUpdate
-        MauSacMapper.toUpdate(existing, request);
+        mauSacMapper.toUpdate(existing, request);
         MauSac update = mauSacRepository.save(existing);
-        return MauSacMapper.toResponse(update);
+        return mauSacMapper.toResponse(update);
     }
 
     @Override
-    public void deleteMauSac(String maMauSac) {
-        MauSac existing = findByMa(maMauSac);
+    public MauSacResponse deleteMauSac(UUID id) {
+        MauSac existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã màu sắc '" + maMauSac + "' không tồn tại.");
+            throw new RuntimeException("Id màu sắc '" + id + "' không tồn tại.");
         }
-
+        MauSacResponse mauSacResponse = mauSacMapper.toResponse(existing);
         mauSacRepository.delete(existing);
+        return mauSacResponse;
     }
-
-
 }

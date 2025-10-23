@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.HangGiayMapper;
 import com.sd51.fsneakers.features.product.dto.request.HangGiayRequest;
@@ -23,20 +24,21 @@ import lombok.experimental.FieldDefaults;
 public class HangGiayServiceImpl implements HangGiayService {
 
     HangGiayRepository hangGiayRepository;
+    HangGiayMapper hangGiayMapper;
 
     @Override
     public List<HangGiayResponse> getAllHangGiay() {
-        return hangGiayRepository.findAll().stream().map(HangGiayMapper::toResponse).toList();
+        return hangGiayRepository.findAll().stream().map(hangGiayMapper::toResponse).toList();
     }
 
     @Override
     public Page<HangGiayResponse> getAllHangGiayPage(Pageable pageable) {
-        return hangGiayRepository.getAllPage(pageable).map(HangGiayMapper::toResponse);
+        return hangGiayRepository.getAllPage(pageable).map(hangGiayMapper::toResponse);
     }
 
     @Override
     public Page<HangGiayResponse> searchHangGiay(String keyword, Integer trangThai, Pageable pageable) {
-        return hangGiayRepository.searchHangGiay(keyword, trangThai, pageable).map(HangGiayMapper::toResponse);
+        return hangGiayRepository.searchHangGiay(keyword, trangThai, pageable).map(hangGiayMapper::toResponse);
     }
 
     @Override
@@ -45,23 +47,28 @@ public class HangGiayServiceImpl implements HangGiayService {
     }
 
     @Override
+    public HangGiay findById(UUID id) {
+        return hangGiayRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
     public HangGiayResponse createHangGiay(HangGiayRequest request) {
         if (findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã hãng giày '" + request.getMa() + "' đã tồn tại!");
         }
-        HangGiay hangGiay = HangGiayMapper.toEntity(request);
+        HangGiay hangGiay = hangGiayMapper.toEntity(request);
         hangGiayRepository.save(hangGiay);
-        return HangGiayMapper.toResponse(hangGiay);
+        return hangGiayMapper.toResponse(hangGiay);
     }
 
     @Override
-    public HangGiayResponse updateHangGiay(String ma, HangGiayRequest request) {
-        HangGiay existing = findByMa(ma);
+    public HangGiayResponse updateHangGiay(UUID id, HangGiayRequest request) {
+        HangGiay existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã hãng giày '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Id hãng giày '" + id + "' không tồn tại!");
 
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã hãng giày '" + request.getMa() + "' đã tồn tại khác !");
             } else {
@@ -69,19 +76,19 @@ public class HangGiayServiceImpl implements HangGiayService {
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ hangGiayUpdate
-        HangGiayMapper.toUpdate(existing, request);
+        hangGiayMapper.toUpdate(existing, request);
         HangGiay update =  hangGiayRepository.save(existing);
-        return HangGiayMapper.toResponse(update);
+        return hangGiayMapper.toResponse(update);
     }
 
     @Override
-    public void deleteHangGiay(String ma) {
-        HangGiay existing = findByMa(ma);
+    public HangGiayResponse deleteHangGiay(UUID id) {
+        HangGiay existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã hãng giày '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Mã hãng giày '" + id + "' không tồn tại!");
         }
+        HangGiayResponse hangGiayResponse = hangGiayMapper.toResponse(existing);
         hangGiayRepository.delete(existing);
+        return hangGiayResponse;
     }
-
-
 }

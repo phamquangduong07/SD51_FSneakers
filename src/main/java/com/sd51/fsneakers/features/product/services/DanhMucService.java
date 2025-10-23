@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 
 import com.sd51.fsneakers.features.product.dto.request.DanhMucRequest;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.sd51.fsneakers.features.product.entity.DanhMuc;
-import org.springframework.web.client.HttpClientErrorException;
 
 public interface DanhMucService {
 
@@ -21,11 +21,13 @@ public interface DanhMucService {
 
     DanhMuc findByMa(String ma);
 
+    DanhMuc findById(UUID id);
+
     DanhMucResponse createDanhMuc(DanhMucRequest request);
 
-    DanhMucResponse updateDanhMucByMa(String ma, DanhMucRequest request);
+    DanhMucResponse updateDanhMucByMa(UUID id, DanhMucRequest request);
 
-    void deleteDanhMuc(String ma);
+    DanhMucResponse deleteDanhMuc(UUID id);
 
 
 

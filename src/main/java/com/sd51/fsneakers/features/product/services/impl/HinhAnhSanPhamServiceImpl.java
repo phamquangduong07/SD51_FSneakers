@@ -37,21 +37,23 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
 
     CloudinaryService cloudinaryService;
 
+    HinhAnhSanPhamMapper hinhAnhSanPhamMapper;
+
     static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
     @Override
     public List<HinhAnhSanPhamResponse> getAllHinhAnhBySanPham() {
-        return hinhAnhSanPhamRepository.findAll().stream().map(HinhAnhSanPhamMapper::toResponse).toList();
+        return hinhAnhSanPhamRepository.findAll().stream().map(hinhAnhSanPhamMapper::toResponse).toList();
     }
 
     @Override
     public Page<HinhAnhSanPhamResponse> getAllHinhAnhSanPhamPage(Pageable pageable) {
-        return hinhAnhSanPhamRepository.getAllPage(pageable).map(HinhAnhSanPhamMapper::toResponse);
+        return hinhAnhSanPhamRepository.getAllPage(pageable).map(hinhAnhSanPhamMapper::toResponse);
     }
 
     @Override
     public Page<HinhAnhSanPhamResponse> searchHinhAnhSanPham(String keyword, Integer trangThai, Pageable pageable) {
-        return hinhAnhSanPhamRepository.searchHinhAnhSanPham(keyword, trangThai, pageable).map(HinhAnhSanPhamMapper::toResponse);
+        return hinhAnhSanPhamRepository.searchHinhAnhSanPham(keyword, trangThai, pageable).map(hinhAnhSanPhamMapper::toResponse);
     }
 
     @Override
@@ -65,38 +67,45 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
     }
 
     @Override
+    public HinhAnhSanPham findById(UUID id) {
+        return hinhAnhSanPhamRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
     public HinhAnhSanPhamResponse createHinhAnhSanPham(HinhAnhSanPhamRequest request) {
         if (hinhAnhSanPhamRepository.findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã hình ảnh sản phẩm '" + request.getMa() + "' đã tồn tại.");
         }
-        HinhAnhSanPham hinhAnhSanPham = HinhAnhSanPhamMapper.toEntity(request);
+        HinhAnhSanPham hinhAnhSanPham = hinhAnhSanPhamMapper.toEntity(request);
         hinhAnhSanPhamRepository.save(hinhAnhSanPham);
-        return HinhAnhSanPhamMapper.toResponse(hinhAnhSanPham);
+        return hinhAnhSanPhamMapper.toResponse(hinhAnhSanPham);
     }
 
     @Override
-    public HinhAnhSanPhamResponse updateHinhAnhSanPham(String ma, HinhAnhSanPhamRequest request) {
-        HinhAnhSanPham existing = findByMa(ma);
+    public HinhAnhSanPhamResponse updateHinhAnhSanPham(UUID id, HinhAnhSanPhamRequest request) {
+        HinhAnhSanPham existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã hình ảnh sản phẩm '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Id hình ảnh sản phẩm '" + id + "' không tồn tại!");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã hình ảnh sản phẩm '" + request.getMa() + "' đã tồn tại!");
             }
         }
-        HinhAnhSanPhamMapper.toUpdate(existing, request);
+        hinhAnhSanPhamMapper.toUpdate(existing, request);
         HinhAnhSanPham update = hinhAnhSanPhamRepository.save(existing);
-        return HinhAnhSanPhamMapper.toResponse(update);
+        return hinhAnhSanPhamMapper.toResponse(update);
     }
 
     @Override
-    public void deleteHinhAnhSanPham(String ma) {
-        HinhAnhSanPham existing = findByMa(ma);
+    public HinhAnhSanPhamResponse deleteHinhAnhSanPham(UUID id) {
+        HinhAnhSanPham existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã hình ảnh sản phẩm '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Mã hình ảnh sản phẩm '" + id + "' không tồn tại!");
         }
+        HinhAnhSanPhamResponse hinhAnhSanPhamResponse = hinhAnhSanPhamMapper.toResponse(existing);
         hinhAnhSanPhamRepository.delete(existing);
+        return hinhAnhSanPhamResponse;
     }
 
 

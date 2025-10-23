@@ -3,35 +3,15 @@ package com.sd51.fsneakers.features.mapper;
 import com.sd51.fsneakers.features.product.dto.request.DeGiayRequest;
 import com.sd51.fsneakers.features.product.dto.response.DeGiayResponse;
 import com.sd51.fsneakers.features.product.entity.DeGiay;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-public class DeGiayMapper {
-    public static DeGiay toEntity(DeGiayRequest req) {
-        if (req == null) return null;
-        DeGiay entity = new DeGiay();
-        entity.setMa(req.getMa());
-        entity.setTen(req.getTen());
-        entity.setTrangThai(req.getTrangThai());
+@Mapper(componentModel = "spring")
+public interface DeGiayMapper {
 
-        return entity;
-    }
-    public static DeGiayResponse toResponse(DeGiay deGiay) {
-        if (deGiay == null) return null;
+    DeGiay toEntity(DeGiayRequest req);
 
-        DeGiayResponse res = new DeGiayResponse();
-        res.setId(deGiay.getId());
-        res.setMa(deGiay.getMa());
-        res.setTen(deGiay.getTen());
-        res.setTrangThai(deGiay.getTrangThai());
-        res.setNgayTao(deGiay.getNgayTao());
-        res.setNgaySua(deGiay.getNgaySua());
+    DeGiayResponse toResponse(DeGiay deGiay);
 
-        return res;
-    }
-    public static void toUpdate(DeGiay deGiay, DeGiayRequest req) {
-        if (deGiay == null || req == null) return;
-
-        if (deGiay.getMa() == null) deGiay.setMa(req.getMa());
-        if (req.getTen() != null) deGiay.setTen(req.getTen());
-        if (req.getTrangThai() != null) deGiay.setTrangThai(req.getTrangThai());
-    }
+    void toUpdate(@MappingTarget DeGiay deGiay, DeGiayRequest req);
 }

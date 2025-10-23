@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.KichThuocRequest;
 import com.sd51.fsneakers.features.product.dto.response.KichThuocResponse;
@@ -19,11 +20,13 @@ public interface KichThuocService {
 
     KichThuoc findByMa(String maKichThuoc);
 
+    KichThuoc findById(UUID id);
+
     KichThuocResponse createKichThuoc(KichThuocRequest request);
 
-    KichThuocResponse updateKichThuoc(String ma, KichThuocRequest request);
+    KichThuocResponse updateKichThuoc(UUID id, KichThuocRequest request);
 
-    void deleteKichThuoc(String maKichThuoc);
+    KichThuocResponse deleteKichThuoc(UUID id);
 
 
 }

@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.KichThuocMapper;
 import com.sd51.fsneakers.features.product.dto.request.KichThuocRequest;
@@ -24,19 +25,21 @@ public class KichThuocServiceImpl implements KichThuocService {
 
     KichThuocRepository kichThuocRepository;
 
+    KichThuocMapper kichThuocMapper;
+
     @Override
     public List<KichThuocResponse> getAllKichThuoc() {
-        return kichThuocRepository.findAll().stream().map(KichThuocMapper::toResponse).toList();
+        return kichThuocRepository.findAll().stream().map(kichThuocMapper::toResponse).toList();
     }
 
     @Override
     public Page<KichThuocResponse> getAllKichThuocPage(Pageable pageable) {
-        return kichThuocRepository.getAllPage(pageable).map(KichThuocMapper::toResponse);
+        return kichThuocRepository.getAllPage(pageable).map(kichThuocMapper::toResponse);
     }
 
     @Override
     public Page<KichThuocResponse> searchKichThuoc(String keyword, Integer trangThai, Pageable pageable) {
-        return kichThuocRepository.searchKichThuoc(keyword, trangThai, pageable).map(KichThuocMapper::toResponse);
+        return kichThuocRepository.searchKichThuoc(keyword, trangThai, pageable).map(kichThuocMapper::toResponse);
     }
 
     @Override
@@ -45,42 +48,47 @@ public class KichThuocServiceImpl implements KichThuocService {
     }
 
     @Override
+    public KichThuoc findById(UUID id) {
+        return kichThuocRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
     public KichThuocResponse createKichThuoc(KichThuocRequest request) {
         if (kichThuocRepository.findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã kích thước '" + request.getMa() + "' đã tồn tại.");
 
         }
-        KichThuoc kichThuoc = KichThuocMapper.toEntity(request);
+        KichThuoc kichThuoc = kichThuocMapper.toEntity(request);
         kichThuocRepository.save(kichThuoc);
-        return KichThuocMapper.toResponse(kichThuoc);
+        return kichThuocMapper.toResponse(kichThuoc);
     }
 
     @Override
-    public KichThuocResponse updateKichThuoc(String ma, KichThuocRequest request) {
-        KichThuoc existing = findByMa(ma);
+    public KichThuocResponse updateKichThuoc(UUID id, KichThuocRequest request) {
+        KichThuoc existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã kích thước '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Id kích thước '" + id + "' không tồn tại.");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã kích thước '" + request.getMa() + "' đã tồn tại!");
             }
         }
         // Cập nhật các thuộc tính của existing với giá trị từ kichThuocUpdate
-        KichThuocMapper.toUpdate(existing, request);
+        kichThuocMapper.toUpdate(existing, request);
         KichThuoc update = kichThuocRepository.save(existing);
-        return KichThuocMapper.toResponse(update);
+        return kichThuocMapper.toResponse(update);
 
     }
 
     @Override
-    public void deleteKichThuoc(String maKichThuoc) {
-        KichThuoc existing = findByMa(maKichThuoc);
+    public KichThuocResponse deleteKichThuoc(UUID id) {
+        KichThuoc existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã kích thước '" + maKichThuoc + "' không tồn tại.");
+            throw new RuntimeException("Mã kích thước '" + id + "' không tồn tại.");
         }
+        KichThuocResponse kichThuocResponse = kichThuocMapper.toResponse(existing);
         kichThuocRepository.delete(existing);
+        return kichThuocResponse;
     }
-
-
 }

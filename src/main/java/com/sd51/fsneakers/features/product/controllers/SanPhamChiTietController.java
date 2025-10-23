@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import com.sd51.fsneakers.features.product.services.SanPhamChiTietService;
 
 import lombok.AccessLevel;
@@ -51,16 +51,15 @@ public class SanPhamChiTietController {
         return ResponseEntity.ok(sanPhamChiTietService.createSanPhamChiTiet(sanPhamChiTiet));
     }
 
-    @PutMapping("/update/{ma}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<SanPhamChiTietResponse> updateSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTietUpdate,
-            @PathVariable String ma) {
-        return ResponseEntity.ok(sanPhamChiTietService.updateSanPhamChiTiet(ma, sanPhamChiTietUpdate));
+            @PathVariable UUID id) {
+        return ResponseEntity.ok(sanPhamChiTietService.updateSanPhamChiTiet(id, sanPhamChiTietUpdate));
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteSanPhamChiTiet(@PathVariable String ma) {
-        sanPhamChiTietService.deleteSanPhamChiTiet(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<SanPhamChiTietResponse> deleteSanPhamChiTiet(@PathVariable UUID id) {
+        return ResponseEntity.ok(sanPhamChiTietService.deleteSanPhamChiTiet(id));
     }
 
 

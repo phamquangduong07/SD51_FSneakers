@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.HangGiayRequest;
 import com.sd51.fsneakers.features.product.dto.response.HangGiayResponse;
@@ -19,11 +20,13 @@ public interface HangGiayService {
 
     HangGiay findByMa(String ma);
 
+    HangGiay findById(UUID id);
+
     HangGiayResponse createHangGiay(HangGiayRequest request);
 
-    HangGiayResponse updateHangGiay(String ma, HangGiayRequest request);
+    HangGiayResponse updateHangGiay(UUID id, HangGiayRequest request);
 
-    void deleteHangGiay(String ma);
+    HangGiayResponse deleteHangGiay(UUID id);
 
 
 }

@@ -50,5 +50,5 @@ public class SanPhamChiTietResponse {
     UUID sanPham;
 
     // image url
-    List<String> hinhAnhSanPhams;
+    List<String> hinhAnhSanPhamUrls;
 }

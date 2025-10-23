@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.SanPhamRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamResponse;
@@ -50,15 +51,14 @@ public class SanPhamController {
         return ResponseEntity.ok(sanPhamService.createSanPham(sanPham));
     }
 
-    @PutMapping("/update/{ma}")
-    public ResponseEntity<SanPhamResponse> updateSanPham(@RequestBody SanPhamRequest sanPham, @PathVariable String ma) {
-        return ResponseEntity.ok(sanPhamService.updateSanPham(ma, sanPham));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<SanPhamResponse> updateSanPham(@RequestBody SanPhamRequest sanPham, @PathVariable UUID id) {
+        return ResponseEntity.ok(sanPhamService.updateSanPham(id, sanPham));
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteSanPham(@PathVariable String ma) {
-        sanPhamService.deleteSanPham(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<SanPhamResponse> deleteSanPham(@PathVariable UUID id) {
+        return ResponseEntity.ok(sanPhamService.deleteSanPham(id));
     }
 
 }

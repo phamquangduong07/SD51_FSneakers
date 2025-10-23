@@ -39,7 +39,4 @@ public class ChatLieu extends BaseEntity {
         this.trangThai = trangThai;
     }
 
-    public ChatLieu(UUID id) {
-        this.id =id;
-    }
 }

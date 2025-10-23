@@ -1,10 +1,10 @@
 package com.sd51.fsneakers.features.product.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.MauSacRequest;
 import com.sd51.fsneakers.features.product.dto.response.MauSacResponse;
-import com.sd51.fsneakers.features.product.entity.MauSac;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,15 +51,14 @@ public class MauSacController {
         return ResponseEntity.ok(mauSacService.createMauSac(mauSac));
     }
 
-    @PutMapping("/update/{ma}")
-    public ResponseEntity<MauSacResponse> updateMauSac(@PathVariable String ma, @RequestBody MauSacRequest mauSac) {
-        return ResponseEntity.ok(mauSacService.updateMauSac(ma, mauSac));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<MauSacResponse> updateMauSac(@PathVariable UUID id, @RequestBody MauSacRequest mauSac) {
+        return ResponseEntity.ok(mauSacService.updateMauSac(id, mauSac));
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteMauSac(@PathVariable String ma) {
-        mauSacService.deleteMauSac(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<MauSacResponse> deleteMauSac(@PathVariable UUID id) {
+        return ResponseEntity.ok(mauSacService.deleteMauSac(id));
     }
 
 }

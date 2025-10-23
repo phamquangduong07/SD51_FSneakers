@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
@@ -19,11 +20,13 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet findByMa(String maSanPhamChiTiet);
 
+    SanPhamChiTiet findById(UUID id);
+
     SanPhamChiTietResponse createSanPhamChiTiet(SanPhamChiTietRequest request);
 
-    SanPhamChiTietResponse updateSanPhamChiTiet(String ma, SanPhamChiTietRequest request);
+    SanPhamChiTietResponse updateSanPhamChiTiet(UUID id, SanPhamChiTietRequest request);
 
-    void deleteSanPhamChiTiet(String maSanPhamChiTiet);
+    SanPhamChiTietResponse deleteSanPhamChiTiet(UUID id);
 
 
 }

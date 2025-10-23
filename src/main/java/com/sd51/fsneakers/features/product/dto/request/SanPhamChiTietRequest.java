@@ -48,5 +48,5 @@ public class SanPhamChiTietRequest {
     UUID sanPhamId;
 
     // image url
-    List<String> hinhAnhSanPhams;
+    List<String> hinhAnhSanPhamUrls;
 }

@@ -3,105 +3,61 @@ package com.sd51.fsneakers.features.mapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
 import com.sd51.fsneakers.features.product.entity.*;
+import org.mapstruct.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
+@Mapper(componentModel = "spring")
+public interface SanPhamChiTietMapper {
 
-public class SanPhamChiTietMapper {
+    // Entity -> Request
+    @Mappings({
+            @Mapping(target = "chatLieu.id", source = "chatLieuId"),
+            @Mapping(target = "danhMuc.id", source = "danhMucId"),
+            @Mapping(target = "deGiay.id", source = "deGiayId"),
+            @Mapping(target = "hangGiay.id", source = "hangGiayId"),
+            @Mapping(target = "kichThuoc.id", source = "kichThuocId"),
+            @Mapping(target = "mauSac.id", source = "mauSacId"),
+            @Mapping(target = "sanPham.id", source = "sanPhamId"),
+            @Mapping(target = "hinhAnhSanPhams", source = "hinhAnhSanPhamUrls", qualifiedByName = "urlsToImages")
+    })
+    SanPhamChiTiet toEntity(SanPhamChiTietRequest req);
 
-    public static SanPhamChiTiet toEntity(SanPhamChiTietRequest req) {
-        if (req == null) return null;
+    // Response -> Entity
+    @Mappings({
+            @Mapping(target = "chatLieu", source = "chatLieu.id"),
+            @Mapping(target = "danhMuc", source = "danhMuc.id"),
+            @Mapping(target = "deGiay", source = "deGiay.id"),
+            @Mapping(target = "hangGiay", source = "hangGiay.id"),
+            @Mapping(target = "kichThuoc", source = "kichThuoc.id"),
+            @Mapping(target = "mauSac", source = "mauSac.id"),
+            @Mapping(target = "sanPham", source = "sanPham.id"),
+            @Mapping(target = "hinhAnhSanPhamUrls", source = "hinhAnhSanPhams", qualifiedByName = "imagesToUrls")
+    })
+    SanPhamChiTietResponse toResponse(SanPhamChiTiet entity);
 
-        SanPhamChiTiet entity = new SanPhamChiTiet();
-        entity.setMa(req.getMa());
-        entity.setMaQr(req.getMaQr());
-        entity.setGiaNhap(req.getGiaNhap());
-        entity.setGiaBan(req.getGiaBan());
-        entity.setSoLuong(req.getSoLuong());
-        entity.setMoTa(req.getMoTa());
-        entity.setTrangThai(req.getTrangThai());
-        entity.setNguoiTao(req.getNguoiTao());
-        entity.setNguoiSua(req.getNguoiSua());
+    void toUpdate(@MappingTarget SanPhamChiTiet entity, SanPhamChiTietRequest req);
 
-        // Map các entity con theo ID
-        if (req.getChatLieuId() != null) {
-            entity.setChatLieu(new ChatLieu(req.getChatLieuId()));
-        }
-        if (req.getDanhMucId() != null) {
-            entity.setDanhMuc(new DanhMuc(req.getDanhMucId()));
-        }
-        if (req.getDeGiayId() != null) {
-            entity.setDeGiay(new DeGiay(req.getDeGiayId()));
-        }
-        if (req.getHangGiayId() != null) {
-            entity.setHangGiay(new HangGiay(req.getHangGiayId()));
-        }
-        if (req.getKichThuocId() != null) {
-            entity.setKichThuoc(new KichThuoc(req.getKichThuocId()));
-        }
-        if (req.getMauSacId() != null) {
-            entity.setMauSac(new MauSac(req.getMauSacId()));
-        }
-        if (req.getSanPhamId() != null) {
-            entity.setSanPham(new SanPham(req.getSanPhamId()));
-        }
-
-        // Map hình ảnh
-        if (req.getHinhAnhSanPhams() != null) {
-            entity.setHinhAnhSanPhams(req.getHinhAnhSanPhams().stream()
-                    .map(url -> HinhAnhSanPham.builder()
-                            .url(url)
-                            .trangThai(1)
-                            .build())
-                    .collect(Collectors.toList()));
-        }
-
-        return entity;
+    // Custom mapper
+    @Named("urlsToImages")
+    default List<HinhAnhSanPham> mapUrlsToImages(List<String> urls) {
+        if (urls == null) return null;
+        return urls.stream()
+                .map(url -> HinhAnhSanPham.builder()
+                        .url(url)
+                        .trangThai(1)
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public static SanPhamChiTietResponse toResponse(SanPhamChiTiet entity) {
-        if (entity == null) return null;
-
-        SanPhamChiTietResponse res = new SanPhamChiTietResponse();
-        res.setId(entity.getId());
-        res.setMa(entity.getMa());
-        res.setMaQr(entity.getMaQr());
-        res.setGiaNhap(entity.getGiaNhap());
-        res.setGiaBan(entity.getGiaBan());
-        res.setSoLuong(entity.getSoLuong());
-        res.setMoTa(entity.getMoTa());
-        res.setTrangThai(entity.getTrangThai());
-        res.setNguoiTao(entity.getNguoiTao());
-        res.setNguoiSua(entity.getNguoiSua());
-
-        // Map id của các entity con
-        if (entity.getChatLieu() != null) res.setChatLieu(entity.getChatLieu().getId());
-        if (entity.getDanhMuc() != null) res.setDanhMuc(entity.getDanhMuc().getId());
-        if (entity.getDeGiay() != null) res.setDeGiay(entity.getDeGiay().getId());
-        if (entity.getHangGiay() != null) res.setHangGiay(entity.getHangGiay().getId());
-        if (entity.getKichThuoc() != null) res.setKichThuoc(entity.getKichThuoc().getId());
-        if (entity.getMauSac() != null) res.setMauSac(entity.getMauSac().getId());
-        if (entity.getSanPham() != null) res.setSanPham(entity.getSanPham().getId());
-
-        // Map hình ảnh
-        if (entity.getHinhAnhSanPhams() != null) {
-            res.setHinhAnhSanPhams(entity.getHinhAnhSanPhams().stream()
-                    .map(HinhAnhSanPham::getUrl)
-                    .collect(Collectors.toList()));
-        }
-
-        return res;
+    @Named("imagesToUrls")
+    default List<String> mapImagesToUrls(List<HinhAnhSanPham> images) {
+        if (images == null) return null;
+        return images.stream()
+                .map(HinhAnhSanPham::getUrl)
+                .collect(Collectors.toList());
     }
 
-    public static void toUpdate(SanPhamChiTiet entity, SanPhamChiTietRequest req) {
-        if (req == null || entity == null) return;
 
-        // Cập nhật có kiểm null
-        if (req.getGiaBan() != null) entity.setGiaBan(req.getGiaBan());
-        if (req.getSoLuong() != null) entity.setSoLuong(req.getSoLuong());
-        if (req.getMoTa() != null) entity.setMoTa(req.getMoTa());
-        if (req.getTrangThai() != null) entity.setTrangThai(req.getTrangThai());
-
-        // ... và cập nhật các liên kết tương tự như ở trên
-    }
 }

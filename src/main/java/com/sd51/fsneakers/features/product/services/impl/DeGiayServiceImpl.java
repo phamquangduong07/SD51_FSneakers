@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.DeGiayMapper;
 import com.sd51.fsneakers.features.product.dto.request.DeGiayRequest;
@@ -23,20 +24,21 @@ import lombok.experimental.FieldDefaults;
 public class DeGiayServiceImpl implements DeGiayService {
 
     DeGiayRepository deGiayRepository;
+    DeGiayMapper deGiayMapper;
 
     @Override
     public List<DeGiayResponse> getAllDeGiay() {
-        return deGiayRepository.findAll().stream().map(DeGiayMapper::toResponse).toList();
+        return deGiayRepository.findAll().stream().map(deGiayMapper::toResponse).toList();
     }
 
     @Override
     public Page<DeGiayResponse> getAllDeGiayPage(Pageable pageable) {
-        return deGiayRepository.getAllPage(pageable).map(DeGiayMapper::toResponse);
+        return deGiayRepository.getAllPage(pageable).map(deGiayMapper::toResponse);
     }
 
     @Override
     public Page<DeGiayResponse> searchDeGiay(String keyword, Integer trangThai, Pageable pageable) {
-        return deGiayRepository.searchDeGiay(keyword, trangThai, pageable).map(DeGiayMapper::toResponse);
+        return deGiayRepository.searchDeGiay(keyword, trangThai, pageable).map(deGiayMapper::toResponse);
     }
 
     @Override
@@ -45,22 +47,27 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
+    public DeGiay findById(UUID id) {
+        return deGiayRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
     public DeGiayResponse createDeGiay(DeGiayRequest request) {
         if (deGiayRepository.findByMa(request.getMa()) != null) {
             throw new RuntimeException("Mã đế giày '" + request.getMa() + "' đã tồn tại!");
         }
-        DeGiay deGiay = DeGiayMapper.toEntity(request);
+        DeGiay deGiay = deGiayMapper.toEntity(request);
         deGiayRepository.save(deGiay);
-        return DeGiayMapper.toResponse(deGiay);
+        return deGiayMapper.toResponse(deGiay);
     }
 
     @Override
-    public DeGiayResponse updateDeGiay(String ma, DeGiayRequest request) {
-        DeGiay existing = findByMa(ma);
+    public DeGiayResponse updateDeGiay(UUID id, DeGiayRequest request) {
+        DeGiay existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã đế giày '" + ma + "' không tồn tại!");
+            throw new RuntimeException("Id đế giày '" + id + "' không tồn tại!");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã đế giày '" + request.getMa() + "' đã tồn tại!");
             } else {
@@ -69,18 +76,20 @@ public class DeGiayServiceImpl implements DeGiayService {
         }
 
         // Cập nhật các thuộc tính của existing với giá trị từ deGiayUpdate
-        DeGiayMapper.toUpdate(existing, request);
+        deGiayMapper.toUpdate(existing, request);
         DeGiay update = deGiayRepository.save(existing);
 
-        return DeGiayMapper.toResponse(update);
+        return deGiayMapper.toResponse(update);
     }
 
     @Override
-    public void deleteDeGiay(String maDeGiay) {
-        DeGiay existing = findByMa(maDeGiay);
+    public DeGiayResponse deleteDeGiay(UUID id) {
+        DeGiay existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã đế giày '" + maDeGiay + "' không tồn tại!");
+            throw new RuntimeException("Id đế giày '" + id + "' không tồn tại!");
         }
+        DeGiayResponse deGiayResponse = deGiayMapper.toResponse(existing);
         deGiayRepository.delete(existing);
+        return deGiayResponse;
     }
 }

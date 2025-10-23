@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.MauSacRequest;
 import com.sd51.fsneakers.features.product.dto.response.MauSacResponse;
@@ -19,11 +20,13 @@ public interface MauSacService {
 
     MauSac findByMa(String maMauSac);
 
+    MauSac findById(UUID id);
+
     MauSacResponse createMauSac(MauSacRequest request);
 
-    MauSacResponse updateMauSac(String ma, MauSacRequest request);
+    MauSacResponse updateMauSac(UUID id, MauSacRequest request);
 
-    void deleteMauSac(String maMauSac);
+    MauSacResponse deleteMauSac(UUID id);
 
 
 }

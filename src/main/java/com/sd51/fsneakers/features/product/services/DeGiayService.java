@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.DeGiayRequest;
 import com.sd51.fsneakers.features.product.dto.response.DeGiayResponse;
@@ -19,11 +20,13 @@ public interface DeGiayService {
 
     DeGiay findByMa(String maDeGiay);
 
+    DeGiay findById(UUID id);
+
     DeGiayResponse createDeGiay(DeGiayRequest request);
 
-    DeGiayResponse updateDeGiay(String ma, DeGiayRequest request);
+    DeGiayResponse updateDeGiay(UUID id, DeGiayRequest request);
 
-    void deleteDeGiay(String maDeGiay);
+    DeGiayResponse deleteDeGiay(UUID id);
 
 
 }

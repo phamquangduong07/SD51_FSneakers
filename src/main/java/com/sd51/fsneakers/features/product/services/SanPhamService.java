@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.product.dto.request.SanPhamRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamResponse;
@@ -19,11 +20,13 @@ public interface SanPhamService {
 
     SanPham findByMa(String maSanPham);
 
+    SanPham findById(UUID id);
+
     SanPhamResponse createSanPham(SanPhamRequest request);
 
-    SanPhamResponse updateSanPham(String ma, SanPhamRequest request);
+    SanPhamResponse updateSanPham(UUID id, SanPhamRequest request);
 
-    void deleteSanPham(String maSanPham);
+    SanPhamResponse deleteSanPham(UUID id);
 
 
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,16 +50,16 @@ public class ChatLieuController {
         return ResponseEntity.ok(chatLieuService.createChatLieu(request));
     }
 
-    @PutMapping("/update/{ma}")
-    public ResponseEntity<ChatLieuResponse> updateChatLieu(@PathVariable("ma") String ma,
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ChatLieuResponse> updateChatLieu(@PathVariable("id") UUID id,
             @RequestBody ChatLieuRequest request) {
-        ChatLieuResponse update = chatLieuService.updateChatLieuByMa(ma, request);
+        ChatLieuResponse update = chatLieuService.updateChatLieuByMa(id, request);
         return ResponseEntity.ok(update);
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<ChatLieuResponse> deleteChatLieu(@PathVariable("ma") String ma) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ChatLieuResponse> deleteChatLieu(@PathVariable("id") UUID id) {
 
-        return ResponseEntity.ok(chatLieuService.deleteChatLieuByMa(ma));
+        return ResponseEntity.ok(chatLieuService.deleteChatLieuByMa(id));
     }
 }

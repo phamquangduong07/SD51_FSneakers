@@ -27,6 +27,6 @@ public class HinhAnhSanPhamResponse {
 
     LocalDateTime ngaySua;
 
-    UUID chiTietSanPhamId;
+    UUID chiTietSanPham;
 
 }

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,16 +62,15 @@ public class DanhMucController {
         return ResponseEntity.ok(danhMucService.createDanhMuc(request));
     }
 
-    @PutMapping("/update/{ma}")
-    public ResponseEntity<DanhMucResponse> updateDanhMuc(@PathVariable String ma, @RequestBody DanhMucRequest request) {
-        DanhMucResponse update = danhMucService.updateDanhMucByMa(ma, request);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<DanhMucResponse> updateDanhMuc(@PathVariable UUID id, @RequestBody DanhMucRequest request) {
+        DanhMucResponse update = danhMucService.updateDanhMucByMa(id, request);
         return ResponseEntity.ok(update);
     }
 
-    @DeleteMapping("/delete/{ma}")
-    public ResponseEntity<Void> deleteDanhMuc(@PathVariable String ma) {
-        danhMucService.deleteDanhMuc(ma);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<DanhMucResponse> deleteDanhMuc(@PathVariable UUID id) {
+        return ResponseEntity.ok(danhMucService.deleteDanhMuc(id));
     }
 
 }

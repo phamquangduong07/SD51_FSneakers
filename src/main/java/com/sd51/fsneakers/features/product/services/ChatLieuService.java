@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +24,16 @@ public interface ChatLieuService {
     // tìm kiếm chất liệu theo mã
     ChatLieu findByMa(String ma);
 
+    // tìm kiếm theo id
+    ChatLieu findById(UUID id);
+
     // create chất liệu
     ChatLieuResponse createChatLieu(ChatLieuRequest request);
 
     // update chất liệu
-    ChatLieuResponse updateChatLieuByMa(String ma, ChatLieuRequest chatLieuUpdate);
+    ChatLieuResponse updateChatLieuByMa(UUID ma, ChatLieuRequest chatLieuUpdate);
 
     // delete chất liệu
-    ChatLieuResponse deleteChatLieuByMa(String ma);
+    ChatLieuResponse deleteChatLieuByMa(UUID ma);
 
 }

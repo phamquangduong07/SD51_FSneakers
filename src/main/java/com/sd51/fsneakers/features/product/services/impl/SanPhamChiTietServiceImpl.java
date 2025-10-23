@@ -1,6 +1,7 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.sd51.fsneakers.features.mapper.SanPhamChiTietMapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
@@ -27,28 +28,32 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
 
     SanPhamChiTietRepository sanPhamChiTietRepository;
 
-    ChatLieuRepository chatLieuRepository;
-
+    SanPhamChiTietMapper sanPhamChiTietMapper;
 
     @Override
     public List<SanPhamChiTietResponse> getAllSanPhamChiTiet() {
-        return sanPhamChiTietRepository.findAll().stream().map(SanPhamChiTietMapper::toResponse).toList();
+        return sanPhamChiTietRepository.findAll().stream().map(sanPhamChiTietMapper::toResponse).toList();
     }
 
     @Override
     public Page<SanPhamChiTietResponse> getAllSanPhamChiTietPage(Pageable pageable) {
-        return sanPhamChiTietRepository.getAllPage(pageable).map(SanPhamChiTietMapper::toResponse);
+        return sanPhamChiTietRepository.getAllPage(pageable).map(sanPhamChiTietMapper::toResponse);
     }
 
     @Override
     public Page<SanPhamChiTietResponse> searchSanPhamChiTiet(String keyword, Integer trangThai, Pageable pageable) {
         return sanPhamChiTietRepository.searchSanPhamChiTiet(keyword, trangThai, pageable)
-                .map(SanPhamChiTietMapper::toResponse);
+                .map(sanPhamChiTietMapper::toResponse);
     }
 
     @Override
     public SanPhamChiTiet findByMa(String maSanPhamChiTiet) {
         return sanPhamChiTietRepository.findByMa(maSanPhamChiTiet);
+    }
+
+    @Override
+    public SanPhamChiTiet findById(UUID id) {
+        return sanPhamChiTietRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
     }
 
     @Override
@@ -58,55 +63,39 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         }
 
 
-        SanPhamChiTiet sanPhamChiTiet = SanPhamChiTietMapper.toEntity(request);
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietMapper.toEntity(request);
         sanPhamChiTietRepository.save(sanPhamChiTiet);
-        return SanPhamChiTietMapper.toResponse(sanPhamChiTiet);
+        return sanPhamChiTietMapper.toResponse(sanPhamChiTiet);
     }
 
     @Override
-    public SanPhamChiTietResponse updateSanPhamChiTiet(String ma, SanPhamChiTietRequest request) {
-        SanPhamChiTiet existing = findByMa(ma);
+    public SanPhamChiTietResponse updateSanPhamChiTiet(UUID id, SanPhamChiTietRequest request) {
+        SanPhamChiTiet existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã sản phẩm chi tiết '" + ma + "' không tồn tại.");
+            throw new RuntimeException("Id sản phẩm chi tiết '" + id + "' không tồn tại.");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!request.getMa().equals(id)) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException(
                         "Mã sản phẩm chi tiết '" + request.getMa() + "' đã tồn tại!");
             }
         }
 
-        SanPhamChiTietMapper.toUpdate(existing, request);
+        sanPhamChiTietMapper.toUpdate(existing, request);
         SanPhamChiTiet updated = sanPhamChiTietRepository.save(existing);
-        return SanPhamChiTietMapper.toResponse(updated);
-
-        // Cập nhật các thuộc tính của existing với giá trị từ sanPhamChiTietUpdate
-//        existing.setMa(sanPhamChiTietUpdate.getMa());
-//        existing.setMaQr(sanPhamChiTietUpdate.getMaQr());
-//        existing.setGiaBan(sanPhamChiTietUpdate.getGiaBan());
-//        existing.setGiaNhap(sanPhamChiTietUpdate.getGiaNhap());
-//        existing.setSoLuong(sanPhamChiTietUpdate.getSoLuong());
-//        existing.setMoTa(sanPhamChiTietUpdate.getMoTa());
-//        existing.setTrangThai(sanPhamChiTietUpdate.getTrangThai());
-//        existing.setNguoiTao(sanPhamChiTietUpdate.getNguoiTao());
-//        existing.setNguoiSua(sanPhamChiTietUpdate.getNguoiSua());
-//        existing.setChatLieu(sanPhamChiTietUpdate.getChatLieu());
-//        existing.setDanhMuc(sanPhamChiTietUpdate.getDanhMuc());
-//        existing.setDeGiay(sanPhamChiTietUpdate.getDeGiay());
-//        existing.setHangGiay(sanPhamChiTietUpdate.getHangGiay());
-//        existing.setKichThuoc(sanPhamChiTietUpdate.getKichThuoc());
-//        existing.setMauSac(sanPhamChiTietUpdate.getMauSac());
-//        existing.setSanPham(sanPhamChiTietUpdate.getSanPham());
+        return sanPhamChiTietMapper.toResponse(updated);
 
     }
 
     @Override
-    public void deleteSanPhamChiTiet(String maSanPhamChiTiet) {
-        SanPhamChiTiet existing = findByMa(maSanPhamChiTiet);
+    public SanPhamChiTietResponse deleteSanPhamChiTiet(UUID id) {
+        SanPhamChiTiet existing = findById(id);
         if (existing == null) {
-            throw new RuntimeException("Mã sản phẩm chi tiết '" + maSanPhamChiTiet + "' không tồn tại.");
+            throw new RuntimeException("Mã sản phẩm chi tiết '" + id + "' không tồn tại.");
         }
+        SanPhamChiTietResponse sanPhamChiTietResponse = sanPhamChiTietMapper.toResponse(existing);
         sanPhamChiTietRepository.delete(existing);
+        return sanPhamChiTietResponse;
     }
 
 

@@ -24,11 +24,13 @@ public interface HinhAnhSanPhamService {
 
     HinhAnhSanPham findByMa(String ma);
 
+    HinhAnhSanPham findById(UUID id);
+
     HinhAnhSanPhamResponse createHinhAnhSanPham(HinhAnhSanPhamRequest request);
 
-    HinhAnhSanPhamResponse updateHinhAnhSanPham(String ma, HinhAnhSanPhamRequest request);
+    HinhAnhSanPhamResponse updateHinhAnhSanPham(UUID id, HinhAnhSanPhamRequest request);
 
-    void deleteHinhAnhSanPham(String ma);
+    HinhAnhSanPhamResponse deleteHinhAnhSanPham(UUID id);
 
     List<HinhAnhSanPham> updloadImage(UUID chiTietSanPhamId, List<MultipartFile> files) throws IOException;
 
