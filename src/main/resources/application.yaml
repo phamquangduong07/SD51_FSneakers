@@ -2,10 +2,12 @@
 spring:
   application:
     name: FSneakers
+server:
+  port: 8081
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=FSneakers;encrypt=true;trustServerCertificate=true
     username: sa
-    password: 28102003
+    password: 2005
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
