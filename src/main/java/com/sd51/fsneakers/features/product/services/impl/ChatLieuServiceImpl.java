@@ -1,6 +1,6 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
-import com.sd51.fsneakers.features.mapper.ChatLieuMapper;
+import com.sd51.fsneakers.features.product.mapper.ChatLieuMapper;
 import com.sd51.fsneakers.features.product.dto.request.ChatLieuRequest;
 import com.sd51.fsneakers.features.product.dto.response.ChatLieuResponse;
 import com.sd51.fsneakers.features.product.entity.ChatLieu;
@@ -73,7 +73,7 @@ public class ChatLieuServiceImpl implements ChatLieuService {
         if (existing == null) {
             throw new RuntimeException("Mã chất liệu '" + ma + "' không tồn tại!");
         }
-        if (!chatLieuUpdate.getMa().equals(ma)) {
+        if (!existing.getMa().equals(chatLieuUpdate.getMa())) {
             if (findByMa(chatLieuUpdate.getMa()) != null) {
                 throw new RuntimeException("Mã chất liệu '" + chatLieuUpdate.getMa() + "' đã tồn tại khác !");
             } else {

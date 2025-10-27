@@ -2,14 +2,11 @@ package com.sd51.fsneakers.features.product.controllers;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.google.zxing.WriterException;
-import com.sd51.fsneakers.features.mapper.SanPhamChiTietMapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
-import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import com.sd51.fsneakers.features.product.services.QRCodeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

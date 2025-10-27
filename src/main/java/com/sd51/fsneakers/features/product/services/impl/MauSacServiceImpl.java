@@ -3,7 +3,7 @@ package com.sd51.fsneakers.features.product.services.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.sd51.fsneakers.features.mapper.MauSacMapper;
+import com.sd51.fsneakers.features.product.mapper.MauSacMapper;
 import com.sd51.fsneakers.features.product.dto.request.MauSacRequest;
 import com.sd51.fsneakers.features.product.dto.response.MauSacResponse;
 import org.springframework.data.domain.Page;
@@ -69,7 +69,7 @@ public class MauSacServiceImpl implements MauSacService {
         if (existing == null) {
             throw new RuntimeException("Id màu sắc '" + id + "' không tồn tại.");
         }
-        if (!request.getMa().equals(id)) {
+        if (!existing.getMa().equals(request.getMa())) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã màu sắc '" + request.getMa() + "' đã tồn tại!");
             }

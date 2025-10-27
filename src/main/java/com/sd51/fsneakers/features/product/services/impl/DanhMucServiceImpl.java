@@ -3,7 +3,7 @@ package com.sd51.fsneakers.features.product.services.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.sd51.fsneakers.features.mapper.DanhMucMapper;
+import com.sd51.fsneakers.features.product.mapper.DanhMucMapper;
 import com.sd51.fsneakers.features.product.dto.request.DanhMucRequest;
 import com.sd51.fsneakers.features.product.dto.response.DanhMucResponse;
 import org.springframework.data.domain.Page;
@@ -68,7 +68,7 @@ public class DanhMucServiceImpl implements DanhMucService {
         if (existing == null) {
             throw new RuntimeException("Id danh mục '" + ma + "' không tồn tại!");
         }
-        if (!request.getMa().equals(ma)) {
+        if (!existing.getMa().equals(request.getMa())) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã danh mục '" + request.getMa() + "' đã tồn tại!");
             } else {

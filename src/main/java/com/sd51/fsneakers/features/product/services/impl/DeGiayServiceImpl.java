@@ -3,7 +3,7 @@ package com.sd51.fsneakers.features.product.services.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.sd51.fsneakers.features.mapper.DeGiayMapper;
+import com.sd51.fsneakers.features.product.mapper.DeGiayMapper;
 import com.sd51.fsneakers.features.product.dto.request.DeGiayRequest;
 import com.sd51.fsneakers.features.product.dto.response.DeGiayResponse;
 import org.springframework.data.domain.Page;
@@ -67,7 +67,7 @@ public class DeGiayServiceImpl implements DeGiayService {
         if (existing == null) {
             throw new RuntimeException("Id đế giày '" + id + "' không tồn tại!");
         }
-        if (!request.getMa().equals(id)) {
+        if (!existing.getMa().equals(request.getMa())) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã đế giày '" + request.getMa() + "' đã tồn tại!");
             } else {

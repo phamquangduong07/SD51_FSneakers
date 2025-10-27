@@ -5,7 +5,7 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import com.sd51.fsneakers.features.mapper.HinhAnhSanPhamMapper;
+import com.sd51.fsneakers.features.product.mapper.HinhAnhSanPhamMapper;
 import com.sd51.fsneakers.features.product.dto.request.HinhAnhSanPhamRequest;
 import com.sd51.fsneakers.features.product.dto.response.HinhAnhSanPhamResponse;
 import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
@@ -87,7 +87,7 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
         if (existing == null) {
             throw new RuntimeException("Id hình ảnh sản phẩm '" + id + "' không tồn tại!");
         }
-        if (!request.getMa().equals(id)) {
+        if (!existing.getMa().equals(request.getMa())) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã hình ảnh sản phẩm '" + request.getMa() + "' đã tồn tại!");
             }

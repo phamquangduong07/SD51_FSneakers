@@ -1,4 +1,4 @@
-package com.sd51.fsneakers.features.mapper;
+package com.sd51.fsneakers.features.product.mapper;
 
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;

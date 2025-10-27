@@ -3,7 +3,7 @@ package com.sd51.fsneakers.features.product.services.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.sd51.fsneakers.features.mapper.SanPhamChiTietMapper;
+import com.sd51.fsneakers.features.product.mapper.SanPhamChiTietMapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
 import org.springframework.data.domain.Page;
@@ -75,7 +75,7 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         if (existing == null) {
             throw new RuntimeException("Id sản phẩm chi tiết '" + id + "' không tồn tại.");
         }
-        if (!request.getMa().equals(id)) {
+        if (!existing.getMa().equals(request.getMa())) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException(
                         "Mã sản phẩm chi tiết '" + request.getMa() + "' đã tồn tại!");

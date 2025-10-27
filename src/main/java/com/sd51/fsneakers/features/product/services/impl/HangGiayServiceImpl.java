@@ -3,7 +3,7 @@ package com.sd51.fsneakers.features.product.services.impl;
 import java.util.List;
 import java.util.UUID;
 
-import com.sd51.fsneakers.features.mapper.HangGiayMapper;
+import com.sd51.fsneakers.features.product.mapper.HangGiayMapper;
 import com.sd51.fsneakers.features.product.dto.request.HangGiayRequest;
 import com.sd51.fsneakers.features.product.dto.response.HangGiayResponse;
 import org.springframework.data.domain.Page;
@@ -68,7 +68,7 @@ public class HangGiayServiceImpl implements HangGiayService {
             throw new RuntimeException("Id hãng giày '" + id + "' không tồn tại!");
 
         }
-        if (!request.getMa().equals(id)) {
+        if (!existing.getMa().equals(request.getMa())) {
             if (findByMa(request.getMa()) != null) {
                 throw new RuntimeException("Mã hãng giày '" + request.getMa() + "' đã tồn tại khác !");
             } else {
