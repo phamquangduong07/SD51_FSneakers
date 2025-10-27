@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" }) // Bỏ qua field kỹ thuật của Hibernate khi lazy load
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Bỏ qua field kỹ thuật của Hibernate khi lazy load
 @Entity
 @Table(name = "chi_tiet_san_pham")
 @Getter
@@ -21,6 +21,7 @@ import java.util.UUID;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SanPhamChiTiet extends BaseEntity {
+
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uniqueidentifier")
@@ -90,6 +91,6 @@ public class SanPhamChiTiet extends BaseEntity {
      */
     @OneToMany(mappedBy = "chiTietSanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference // Cho phép Jackson serialize ra JSON (bên cha)
-    List<HinhAnhSanPham> hinhAnhSanPhams;
+            List<HinhAnhSanPham> hinhAnhSanPhams;
 
 }

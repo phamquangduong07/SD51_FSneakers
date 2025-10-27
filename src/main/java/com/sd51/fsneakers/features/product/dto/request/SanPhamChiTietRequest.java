@@ -16,8 +16,6 @@ public class SanPhamChiTietRequest {
 
     String ma;
 
-    String maQr;
-
     BigDecimal giaBan;
 
     BigDecimal giaNhap;

@@ -1,10 +1,16 @@
 package com.sd51.fsneakers.features.product.controllers;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.google.zxing.WriterException;
+import com.sd51.fsneakers.features.mapper.SanPhamChiTietMapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
+import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
+import com.sd51.fsneakers.features.product.services.QRCodeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,36 +30,40 @@ import lombok.experimental.FieldDefaults;
 public class SanPhamChiTietController {
 
     SanPhamChiTietService sanPhamChiTietService;
+    QRCodeService qrCodeService;
 
-    @GetMapping({ "", "/" })
+
+
+    @GetMapping({"", "/"})
     public ResponseEntity<List<SanPhamChiTietResponse>> getAllSanPhamChiTiet() {
         return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTiet());
     }
 
     @GetMapping("/page")
     public ResponseEntity<Page<SanPhamChiTietResponse>> getAllSanPhamChiTietPage(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+                                                                                 @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(sanPhamChiTietService.getAllSanPhamChiTietPage(pageable));
     }
 
     @GetMapping("/search")
     public ResponseEntity<Page<SanPhamChiTietResponse>> searchSanPhamChiTiet(@RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Integer trangThai,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+                                                                             @RequestParam(required = false) Integer trangThai,
+                                                                             @RequestParam(defaultValue = "0") int page,
+                                                                             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<SanPhamChiTietResponse> createSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTiet) {
+    public ResponseEntity<SanPhamChiTietResponse> createSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTiet) throws IOException, WriterException {
         return ResponseEntity.ok(sanPhamChiTietService.createSanPhamChiTiet(sanPhamChiTiet));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<SanPhamChiTietResponse> updateSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTietUpdate,
-            @PathVariable UUID id) {
+                                                                       @PathVariable UUID id) {
+
         return ResponseEntity.ok(sanPhamChiTietService.updateSanPhamChiTiet(id, sanPhamChiTietUpdate));
     }
 
@@ -61,6 +71,4 @@ public class SanPhamChiTietController {
     public ResponseEntity<SanPhamChiTietResponse> deleteSanPhamChiTiet(@PathVariable UUID id) {
         return ResponseEntity.ok(sanPhamChiTietService.deleteSanPhamChiTiet(id));
     }
-
-
 }

@@ -34,3 +34,4 @@ cloudinary:
 
 server:
   port: 8081
+

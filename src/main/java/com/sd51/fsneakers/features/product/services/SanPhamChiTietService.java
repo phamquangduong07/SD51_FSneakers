@@ -28,5 +28,4 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTietResponse deleteSanPhamChiTiet(UUID id);
 
-
 }

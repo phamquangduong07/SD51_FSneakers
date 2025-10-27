@@ -3,7 +3,6 @@ package com.sd51.fsneakers.features.mapper;
 import com.sd51.fsneakers.features.product.dto.request.HinhAnhSanPhamRequest;
 import com.sd51.fsneakers.features.product.dto.response.HinhAnhSanPhamResponse;
 import com.sd51.fsneakers.features.product.entity.HinhAnhSanPham;
-import com.sd51.fsneakers.features.product.entity.SanPhamChiTiet;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

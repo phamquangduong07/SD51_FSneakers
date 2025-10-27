@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.sd51.fsneakers.features.mapper.SanPhamChiTietMapper;
 import com.sd51.fsneakers.features.product.dto.request.SanPhamChiTietRequest;
 import com.sd51.fsneakers.features.product.dto.response.SanPhamChiTietResponse;
-import com.sd51.fsneakers.features.product.repositories.ChatLieuRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -62,8 +61,10 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
             throw new RuntimeException("Mã sản phẩm chi tiết '" + request.getMa() + "' đã tồn tại.");
         }
 
-
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietMapper.toEntity(request);
+        // Sinh mã QR ngẫu nhiên
+        String maQr = "QR-" + UUID.randomUUID().toString().substring(0, 8);
+        sanPhamChiTiet.setMaQr(maQr);
         sanPhamChiTietRepository.save(sanPhamChiTiet);
         return sanPhamChiTietMapper.toResponse(sanPhamChiTiet);
     }
@@ -97,6 +98,5 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         sanPhamChiTietRepository.delete(existing);
         return sanPhamChiTietResponse;
     }
-
 
 }

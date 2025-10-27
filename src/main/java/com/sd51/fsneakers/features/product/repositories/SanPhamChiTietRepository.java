@@ -33,4 +33,6 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
                         @Param("keyword") String keyword,
                         @Param("trangThai") Integer trangThai,
                         Pageable pageable);
+
+    Optional<SanPhamChiTiet> findByMaQr(String maQr);
 }
