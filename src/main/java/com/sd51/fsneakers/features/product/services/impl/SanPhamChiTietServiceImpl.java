@@ -52,7 +52,14 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
 
     @Override
     public SanPhamChiTiet findById(UUID id) {
-        return sanPhamChiTietRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+        return sanPhamChiTietRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Không tìm thấy dữ liệu với id = " + id));
+    }
+
+    @Override
+    public SanPhamChiTietResponse getById(UUID id) {
+        SanPhamChiTiet entity = findById(id);
+        return sanPhamChiTietMapper.toResponse(entity);
     }
 
     @Override
@@ -62,7 +69,7 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         }
 
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietMapper.toEntity(request);
-        // Sinh mã QR ngẫu nhiên
+        // Sinh mã, QR ngẫu nhiên
         String maQr = "QR-" + UUID.randomUUID().toString().substring(0, 8);
         sanPhamChiTiet.setMaQr(maQr);
         sanPhamChiTietRepository.save(sanPhamChiTiet);

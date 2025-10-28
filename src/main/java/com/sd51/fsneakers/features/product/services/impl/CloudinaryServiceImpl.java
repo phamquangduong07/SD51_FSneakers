@@ -1,6 +1,5 @@
 package com.sd51.fsneakers.features.product.services.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 

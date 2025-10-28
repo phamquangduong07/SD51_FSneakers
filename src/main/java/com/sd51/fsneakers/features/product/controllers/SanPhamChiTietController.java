@@ -52,6 +52,11 @@ public class SanPhamChiTietController {
         return ResponseEntity.ok(sanPhamChiTietService.searchSanPhamChiTiet(keyword, trangThai, pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SanPhamChiTietResponse> getByIdSanPhamChiTiet(@PathVariable UUID id) {
+        return ResponseEntity.ok(sanPhamChiTietService.getById(id));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<SanPhamChiTietResponse> createSanPhamChiTiet(@RequestBody SanPhamChiTietRequest sanPhamChiTiet) throws IOException, WriterException {
         return ResponseEntity.ok(sanPhamChiTietService.createSanPhamChiTiet(sanPhamChiTiet));

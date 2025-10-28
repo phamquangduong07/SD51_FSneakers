@@ -22,6 +22,8 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet findById(UUID id);
 
+    SanPhamChiTietResponse getById(UUID id);
+
     SanPhamChiTietResponse createSanPhamChiTiet(SanPhamChiTietRequest request);
 
     SanPhamChiTietResponse updateSanPhamChiTiet(UUID id, SanPhamChiTietRequest request);

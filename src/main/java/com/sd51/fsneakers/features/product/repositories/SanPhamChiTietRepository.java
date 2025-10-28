@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Repository
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, UUID> {
-//        Optional<SanPhamChiTiet> findByMa(String ma);
+        Optional<SanPhamChiTiet> findById(UUID id);
         SanPhamChiTiet findByMa(String ma);
         void deleteByMa(String ma);
         boolean existsByMa(String ma);
